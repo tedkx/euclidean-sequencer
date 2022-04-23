@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import SequencerSettings from '../SequencerSettings';
-import PatternDisplay from '../PatternDisplay';
+import SequenceDisplay from '../SequenceDisplay';
 
 /*
 pattern: {
@@ -24,31 +24,29 @@ const colorPalette = [
   'pink',
 ];
 
-const defaultPatterns = [
+const defaultSequences = [
   {
     active: true,
-    steps: Array.from(Array(16)).map((_, i) => (i % 2 === 0 ? 127 : 0)),
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
   },
   {
     active: false,
-    steps: [
-      127, 127, 127, 0, 127, 127, 127, 0, 127, 127, 127, 0, 127, 127, 127, 0,
-    ],
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 1) % 4 !== 0 })),
   },
   {
     active: true,
-    steps: [127, 0, 0, 0, 127, 0, 0, 0, 127, 0, 0, 0, 127, 0, 0, 0],
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 === 0 })),
   },
 ];
 
-const SequencerView = ({ patterns = defaultPatterns }) => {
+const SequencerView = ({ sequences = defaultSequences }) => {
   return (
     <Card className="sequencer-container" bordered={false}>
       <div>
         <SequencerSettings />
       </div>
       <div>
-        <PatternDisplay colorPalette={colorPalette} patterns={patterns} />
+        <SequenceDisplay colorPalette={colorPalette} sequences={sequences} />
       </div>
     </Card>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { arrayOf, bool, number, shape } from 'prop-types';
 
 const baseRadius = 120;
 const circlePadding = 15;
@@ -16,16 +17,16 @@ const drawCircle = (ctx, radius, strokeColor) => {
   ctx.stroke();
 };
 
-const PatternDisplay = ({ colorPalette, patterns }) => {
+const SequenceDisplay = ({ colorPalette, sequences }) => {
   const canvasRef = React.useRef(null);
 
   React.useEffect(() => {
-    if (Array.isArray(patterns)) {
+    if (Array.isArray(sequences)) {
       const ctx = canvasRef.current.getContext('2d');
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-      for (let i = 0; i < patterns.length; i++) {
-        const { active, steps } = patterns[i];
+      for (let i = 0; i < sequences.length; i++) {
+        const { active, steps } = sequences[i];
         if (Array.isArray(steps)) {
           drawCircle(
             ctx,
@@ -35,9 +36,21 @@ const PatternDisplay = ({ colorPalette, patterns }) => {
         }
       }
     }
-  }, [colorPalette, patterns]);
+  }, [colorPalette, sequences]);
 
   return <canvas height={canvasHeight} width={canvasWidth} ref={canvasRef} />;
 };
 
-export default PatternDisplay;
+SequenceDisplay.propTypes = {
+  sequences: arrayOf(
+    shape({
+      active: bool,
+      steps: {
+        hit: bool,
+        velocity: number,
+      },
+    })
+  ),
+};
+
+export default SequenceDisplay;
