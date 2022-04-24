@@ -2,29 +2,37 @@ import React from 'react';
 import { Card } from 'antd';
 import SequencerSettings from '../SequencerSettings';
 import SequenceDisplay from '../SequenceDisplay';
-
-/*
-pattern: {
-  hits,
-  offset,
-  note,
-  ratio,
-  steps,
-}
-*/
+import palettes from 'nice-color-palettes/100.json';
 
 const colorPalette = [
-  'cyan',
-  'orange',
-  'blue',
-  'red',
-  'green',
-  'purple',
-  'yellow',
-  'pink',
+  '#197278',
+  ...palettes[3].slice(1, 4),
+  '#A4236E',
+  ...palettes[84].slice(0, 4),
+  '#84CC92',
 ];
 
 const defaultSequences = [
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
+  },
   {
     active: true,
     steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),

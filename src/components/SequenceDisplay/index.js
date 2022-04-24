@@ -2,10 +2,10 @@ import React from 'react';
 import { arrayOf, bool, number, shape } from 'prop-types';
 import { cardBackground } from 'assets/styles/colors';
 
-const baseRadius = 120;
-const circlePadding = 15;
-const canvasWidth = 360;
-const canvasHeight = 400;
+const baseRadius = 35;
+const circlePadding = 16;
+const canvasWidth = 400;
+const canvasHeight = 500;
 const canvasCenter = { x: canvasWidth / 2, y: canvasHeight / 2 };
 const inactiveColor = '#383838';
 const lineWidth = 1;
@@ -49,7 +49,7 @@ const SequenceDisplay = ({ colorPalette, sequences }) => {
       for (let i = 0; i < sequences.length; i++) {
         const { active, steps } = sequences[i];
         if (Array.isArray(steps)) {
-          const radius = baseRadius - i * circlePadding;
+          const radius = baseRadius + i * circlePadding;
           const color = active ? colorPalette[i] : inactiveColor;
 
           drawCircle(ctx, radius, active ? colorPalette[i] : color);
@@ -64,17 +64,26 @@ const SequenceDisplay = ({ colorPalette, sequences }) => {
     }
   }, [colorPalette, sequences]);
 
-  return <canvas height={canvasHeight} width={canvasWidth} ref={canvasRef} />;
+  return (
+    <canvas
+      style={{ borderLeft: 'solid 1px #1f1f1f' }}
+      height={canvasHeight}
+      width={canvasWidth}
+      ref={canvasRef}
+    />
+  );
 };
 
 SequenceDisplay.propTypes = {
   sequences: arrayOf(
     shape({
       active: bool,
-      steps: {
-        hit: bool,
-        velocity: number,
-      },
+      steps: arrayOf(
+        shape({
+          hit: bool,
+          velocity: number,
+        })
+      ),
     })
   ),
 };
