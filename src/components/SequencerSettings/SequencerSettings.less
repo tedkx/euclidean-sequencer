@@ -1,21 +1,40 @@
+@settingWidth: 32px;
+@settingHeight: 32px;
+@settingRightMargin: 16px;
+@settingBottomMargin: 12px;
+
 .sequencer-settings-container {
+    .settings-labels-container {
+        align-items: center;
+        display: flex;
+        font-size: 12px;
+        justify-content: flex-start;
+        margin-bottom: 4px;
+
+        .setting-label {
+            margin-right: @settingRightMargin;
+            width: @settingWidth;
+            max-width: @settingWidth;
+            overflow: hidden;
+        }
+    }
 
     .sequence {
         align-items: center;
         display: flex;
         justify-content: flex-start;
-        margin-bottom: 12px;
+        margin-bottom: @settingBottomMargin;
 
         .sequence-setting {
             align-items: center;
             cursor: pointer;
             display: flex;
-            height: 32px;
+            height: @settingHeight;
             justify-content: center;
-            margin-right: 16px;
+            margin-right: @settingRightMargin;
             overflow: hidden;
             position: relative;
-            width: 32px;
+            width: @settingWidth;
 
             .bg {
                 position: absolute;
