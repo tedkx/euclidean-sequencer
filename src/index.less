@@ -1,7 +1,11 @@
 @import '~antd/lib/style/themes/dark.less';
 @import '~antd/dist/antd.compact.less';
 
+// ant vars
 @body-background: #1F1F1F;
+
+// custom vars
+@card-background: #282828;
 
 body {
   margin: 0;
@@ -18,7 +22,7 @@ code {
 }
 
 .ant-card {
-  background-color: #282828;
+  background-color: @card-background;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
