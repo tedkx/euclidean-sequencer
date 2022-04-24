@@ -30,12 +30,20 @@ const defaultSequences = [
     steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
   },
   {
-    active: false,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 1) % 4 !== 0 })),
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
   },
   {
     active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 === 0 })),
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
+  },
+  {
+    active: true,
+    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
   },
 ];
 
