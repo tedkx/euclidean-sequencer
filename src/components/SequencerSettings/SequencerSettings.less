@@ -1,0 +1,47 @@
+.sequencer-settings-container {
+
+    .sequence {
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 12px;
+
+        .sequence-setting {
+            align-items: center;
+            cursor: pointer;
+            display: flex;
+            height: 32px;
+            justify-content: center;
+            margin-right: 16px;
+            overflow: hidden;
+            position: relative;
+            width: 32px;
+
+            .bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 0.2;
+                transition: opacity 0.25s;
+            }
+
+            &:hover .bg { opacity: 0.5 ;}
+
+            &.rounded {
+                border-radius: 50%;
+                border: solid 1px #FFF;
+
+                &.dashed {
+                    border: dashed 1px #FFF;
+                }
+            }
+        }
+
+        .active-switch {
+            cursor: pointer;
+            font-size: 16px;
+        }
+    }
+}

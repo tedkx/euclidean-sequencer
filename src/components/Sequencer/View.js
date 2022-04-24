@@ -59,7 +59,7 @@ const SequencerView = ({ sequences = defaultSequences }) => {
   return (
     <Card className="sequencer-container" bordered={false}>
       <div>
-        <SequencerSettings />
+        <SequencerSettings colorPalette={colorPalette} sequences={sequences} />
       </div>
       <div>
         <SequenceDisplay colorPalette={colorPalette} sequences={sequences} />
