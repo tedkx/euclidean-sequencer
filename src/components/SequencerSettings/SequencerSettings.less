@@ -27,13 +27,14 @@
 
         .sequence-setting {
             align-items: center;
-            cursor: pointer;
+            background: rgba(0,0,0,0.5);
             display: flex;
             font-size: 14px;
             font-weight: bold;
             height: @settingHeight;
             justify-content: center;
             margin-right: @settingRightMargin;
+            opacity: 0.4;
             overflow: hidden;
             position: relative;
             width: @settingWidth;
@@ -48,16 +49,26 @@
                 transition: opacity 0.25s;
             }
 
-            &:hover .bg { opacity: 0.5 ;}
-
             &.rounded {
                 border-radius: 50%;
-                border: solid 1px #FFF;
-
-                &.dashed {
-                    border: dashed 1px #FFF;
-                }
+                border: dashed 1px #FFF;
             }
+
+            &.active {
+                background: none;
+                cursor: pointer;
+                opacity: 1;
+
+                &.rounded { border: solid 1px #FFF; }
+
+                .bg { 
+                    opacity: 0.2;
+                }
+
+                &:hover .bg { opacity: 0.5 ;}
+            }
+
+            
         }
 
         .active-switch {
