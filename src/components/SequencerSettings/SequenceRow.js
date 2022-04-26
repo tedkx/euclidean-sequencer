@@ -2,7 +2,7 @@ import React from 'react';
 import SettingContainer from './SettingContainer';
 import { PoweroffOutlined } from '@ant-design/icons';
 
-const SequenceRow = ({ active, color, offset, steps }) => {
+const SequenceRow = ({ active, color, offset, onToggleActive, steps }) => {
   const { stepsCount, hits } = React.useMemo(
     () => ({
       hits: steps.filter(s => s.hit).length,
@@ -14,7 +14,12 @@ const SequenceRow = ({ active, color, offset, steps }) => {
 
   return (
     <div className="sequence">
-      <SettingContainer active={active} color={color} rounded dashed={!active}>
+      <SettingContainer
+        active={active}
+        color={color}
+        onClick={onToggleActive}
+        rounded
+      >
         <PoweroffOutlined className="active-switch" style={{ color }} />
       </SettingContainer>
       <SettingContainer active={active} color={color}>

@@ -12,64 +12,15 @@ const colorPalette = [
   '#84CC92',
 ];
 
-const defaultSequences = [
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
-    offset: 0,
-  },
-  {
-    active: false,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
-    offset: 0,
-  },
-  {
-    active: false,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
-    offset: 0,
-  },
-  {
-    active: true,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
-    offset: 0,
-  },
-];
-
-const SequencerView = ({ sequences = defaultSequences }) => {
+const SequencerView = ({ sequences, ...props }) => {
   return (
     <Card className="sequencer-container" bordered={false}>
       <div>
-        <SequencerSettings colorPalette={colorPalette} sequences={sequences} />
+        <SequencerSettings
+          colorPalette={colorPalette}
+          sequences={sequences}
+          {...props}
+        />
       </div>
       <div>
         <SequenceDisplay colorPalette={colorPalette} sequences={sequences} />
