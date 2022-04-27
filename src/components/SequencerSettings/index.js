@@ -2,7 +2,12 @@ import React from 'react';
 import './SequencerSettings.less';
 import SequenceRow from './SequenceRow';
 
-const SequencerSettings = ({ colorPalette, onToggleActive, sequences }) => {
+const SequencerSettings = ({
+  colorPalette,
+  onStepCountChange,
+  onToggleActive,
+  sequences,
+}) => {
   return (
     <div className="sequencer-settings-container">
       <div className="settings-labels-container">
@@ -16,6 +21,7 @@ const SequencerSettings = ({ colorPalette, onToggleActive, sequences }) => {
           {...sequence}
           color={colorPalette[idx]}
           key={idx}
+          onStepCountChange={value => onStepCountChange(idx, value)}
           onToggleActive={() => onToggleActive(idx)}
         />
       ))}

@@ -14,9 +14,25 @@ const Sequencer = () => {
     [setSequences]
   );
 
+  const onStepCountChange = React.useCallback(
+    (idx, value) =>
+      setSequences(seqs =>
+        seqs.map((s, i) =>
+          i === idx
+            ? { ...s, steps: defaultSequences[idx].steps.slice(0, value) }
+            : s
+        )
+      ),
+    [setSequences]
+  );
+
   return (
     <div>
-      <SequencerView onToggleActive={onToggleActive} sequences={sequences} />
+      <SequencerView
+        onStepCountChange={onStepCountChange}
+        onToggleActive={onToggleActive}
+        sequences={sequences}
+      />
     </div>
   );
 };

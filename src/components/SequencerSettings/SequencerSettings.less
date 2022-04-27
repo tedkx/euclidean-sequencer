@@ -3,6 +3,15 @@
 @settingRightMargin: 16px;
 @settingBottomMargin: 12px;
 
+.window-overlay {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 99;
+  }
+
 .sequencer-settings-container {
     .settings-labels-container {
         align-items: center;
@@ -75,6 +84,24 @@
         .active-switch {
             cursor: pointer;
             font-size: 16px;
+        }
+
+        .incremental-setting {
+            align-items: center;
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+
+            .setting-overlay {
+                bottom: 0;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 5;
+            }
         }
     }
 }
