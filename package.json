@@ -34,6 +34,7 @@
     "jest-watch-typeahead": "^1.0.0",
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "nice-color-palettes": "^3.0.0",
     "postcss": "^8.4.4",

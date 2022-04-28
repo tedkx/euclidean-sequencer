@@ -1,7 +1,68 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { func, number } from 'prop-types';
+import { debounce } from 'lodash';
 
 const pixelsForValueChange = 10;
+const defaultStep = 1;
+
+const useWheelValueChanging = ({
+  max,
+  min,
+  onSetValue,
+  step = defaultStep,
+  value,
+}) => {
+  const ref = React.useRef({
+    factor: 1,
+    max,
+    min,
+    step,
+    value,
+  });
+  const elementRef = React.useRef();
+
+  React.useEffect(() => {
+    ref.current.step = step;
+    ref.current.value = value;
+    ref.current.min = min;
+    ref.current.max = max;
+  }, [value, step, min, max]);
+
+  const resetFactor = React.useMemo(
+    () =>
+      debounce(() => {
+        ref.current.factor = ref.current.step;
+      }, 25),
+    []
+  );
+
+  React.useEffect(() => {
+    const onWheel = e => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+      const { value, step, min, max } = ref.current;
+      const newValue =
+        value + step * ref.current.factor * (e.deltaY < 0 ? 1 : -1);
+      onSetValue(Math.min(max, Math.max(min, newValue)));
+      ref.current.factor += step;
+      resetFactor();
+    };
+
+    elementRef.current.addEventListener('wheel', onWheel, { passive: false });
+
+    return () => {
+      if (elementRef.current)
+        elementRef.current.removeEventListener('wheel', onWheel, {
+          passive: false,
+        });
+    };
+  }, []);
+
+  return { elementRef };
+};
 
 const useClickValueChanging = ({ max, min, onSetValue, value }) => {
   const ref = React.useRef({
@@ -73,10 +134,15 @@ const useClickValueChanging = ({ max, min, onSetValue, value }) => {
 const IncrementalSetting = props => {
   const { value } = props;
   const { dragging, onMouseDown } = useClickValueChanging(props);
+  const { elementRef } = useWheelValueChanging(props);
 
   return (
     <div className="incremental-setting">
-      <div className="setting-overlay" onMouseDown={onMouseDown}></div>
+      <div
+        className="setting-overlay"
+        onMouseDown={onMouseDown}
+        ref={elementRef}
+      ></div>
       {dragging && <div className="window-overlay"></div>}
       {value}
     </div>
