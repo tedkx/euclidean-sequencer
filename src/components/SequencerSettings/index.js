@@ -1,4 +1,5 @@
 import React from 'react';
+import { array, arrayOf, func, string } from 'prop-types';
 import './SequencerSettings.less';
 import SequenceRow from './SequenceRow';
 
@@ -29,6 +30,14 @@ const SequencerSettings = ({
       ))}
     </div>
   );
+};
+
+SequencerSettings.propTypes = {
+  colorPalette: arrayOf(string),
+  onOffsetChange: func,
+  onStepCountChange: func,
+  onToggleActive: func,
+  sequences: array,
 };
 
 export default SequencerSettings;

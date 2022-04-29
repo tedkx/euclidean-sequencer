@@ -159,6 +159,7 @@ IncrementalSetting.propTypes = {
   max: number,
   min: number,
   onSetValue: func,
+  step: number,
   value: number,
 };
 

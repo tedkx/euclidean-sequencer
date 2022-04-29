@@ -1,4 +1,5 @@
 import React from 'react';
+import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import SettingContainer from './SettingContainer';
 import { PoweroffOutlined } from '@ant-design/icons';
 import IncrementalSetting from './IncrementalSetting';
@@ -52,6 +53,16 @@ const SequenceRow = ({
       </SettingContainer>
     </div>
   );
+};
+
+SequenceRow.propTypes = {
+  active: bool,
+  color: string,
+  offset: number,
+  onOffsetChange: func,
+  onStepCountChange: func,
+  onToggleActive: func,
+  steps: arrayOf(shape({ hit: bool })),
 };
 
 export default SequenceRow;
