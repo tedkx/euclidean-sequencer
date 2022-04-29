@@ -39,7 +39,7 @@ const SequenceRow = ({
         />
       </SettingContainer>
       <SettingContainer active={active} color={color}>
-        {hits}
+        <IncrementalSetting max={stepCount} min={0} value={hits} />
       </SettingContainer>
       <SettingContainer active={active} color={color}>
         {offset}

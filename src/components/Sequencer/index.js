@@ -3,6 +3,8 @@ import SequencerView from './View';
 import { defaultSequences } from './mockData';
 import './Sequencer.less';
 
+window.defaultSequences = defaultSequences;
+
 const Sequencer = () => {
   const [sequences, setSequences] = React.useState(defaultSequences);
 

@@ -38,6 +38,8 @@ const useWheelValueChanging = ({
   );
 
   React.useEffect(() => {
+    if (typeof onSetValue !== 'function') return;
+
     const onWheel = e => {
       e.stopPropagation();
       e.stopImmediatePropagation();
@@ -59,7 +61,7 @@ const useWheelValueChanging = ({
           passive: false,
         });
     };
-  }, []);
+  }, [onSetValue]);
 
   return { elementRef };
 };
@@ -114,19 +116,23 @@ const useClickValueChanging = ({ max, min, onSetValue, value }) => {
     [onSetValue, min, max]
   );
 
-  const onMouseDown = React.useCallback(e => {
-    if (e.button === 0) {
-      setDragging(true);
-      ref.current.y = e.pageY;
+  const onMouseDown = React.useCallback(
+    e => {
+      if (typeof onSetValue !== 'function') return;
+      if (e.button === 0) {
+        setDragging(true);
+        ref.current.y = e.pageY;
 
-      ref.current.mouseMovelistener = handleMouseMove;
-      ref.current.mouseUplistener = handleMouseUp;
-      ref.current.justPressed = true;
+        ref.current.mouseMovelistener = handleMouseMove;
+        ref.current.mouseUplistener = handleMouseUp;
+        ref.current.justPressed = true;
 
-      window.addEventListener('mousemove', ref.current.mouseMovelistener);
-      window.addEventListener('mouseup', ref.current.mouseUplistener);
-    }
-  }, []);
+        window.addEventListener('mousemove', ref.current.mouseMovelistener);
+        window.addEventListener('mouseup', ref.current.mouseUplistener);
+      }
+    },
+    [onSetValue]
+  );
 
   return { dragging, onMouseDown };
 };
