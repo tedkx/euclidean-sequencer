@@ -28,9 +28,18 @@ const Sequencer = () => {
     [setSequences]
   );
 
+  const onOffsetChange = React.useCallback(
+    (idx, offset) =>
+      setSequences(seqs =>
+        seqs.map((s, i) => (i === idx ? { ...s, offset } : s))
+      ),
+    [setSequences]
+  );
+
   return (
     <div>
       <SequencerView
+        onOffsetChange={onOffsetChange}
         onStepCountChange={onStepCountChange}
         onToggleActive={onToggleActive}
         sequences={sequences}

@@ -7,6 +7,7 @@ const SequenceRow = ({
   active,
   color,
   offset,
+  onOffsetChange,
   onStepCountChange,
   onToggleActive,
   steps,
@@ -42,7 +43,12 @@ const SequenceRow = ({
         <IncrementalSetting max={stepCount} min={0} value={hits} />
       </SettingContainer>
       <SettingContainer active={active} color={color}>
-        {offset}
+        <IncrementalSetting
+          max={24}
+          min={-24}
+          onSetValue={onOffsetChange}
+          value={offset}
+        />
       </SettingContainer>
     </div>
   );

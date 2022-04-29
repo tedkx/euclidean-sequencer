@@ -4,6 +4,7 @@ import SequenceRow from './SequenceRow';
 
 const SequencerSettings = ({
   colorPalette,
+  onOffsetChange,
   onStepCountChange,
   onToggleActive,
   sequences,
@@ -21,6 +22,7 @@ const SequencerSettings = ({
           {...sequence}
           color={colorPalette[idx]}
           key={idx}
+          onOffsetChange={value => onOffsetChange(idx, value)}
           onStepCountChange={value => onStepCountChange(idx, value)}
           onToggleActive={() => onToggleActive(idx)}
         />
