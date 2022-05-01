@@ -1,7 +1,9 @@
 import React from 'react';
 import { Select } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { scales } from 'lib/constants';
+import { maxMidiNote, minMidiNote, scales } from 'lib/constants';
+import IncrementalParameter from '../Parameter/Incremental';
+import ParameterContainer from '../Parameter/Container';
 
 const defaultScale = 'dorian';
 
@@ -16,6 +18,16 @@ const SequencerGlobalControl = props => {
 
   return (
     <div className="global-control">
+      <div>
+        Base Note:{' '}
+        <ParameterContainer active color="#999" inline>
+          <IncrementalParameter
+            max={maxMidiNote}
+            min={minMidiNote}
+            value={72}
+          />
+        </ParameterContainer>
+      </div>
       <div>
         Scale:{' '}
         <Select

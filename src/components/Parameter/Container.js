@@ -1,16 +1,18 @@
 import React from 'react';
+import './Parameter.less';
 
-const SettingContainer = ({
+const ParameterContainer = ({
   active,
   children,
   className,
   color,
+  inline,
   onClick,
   rounded,
 }) => {
-  const containerClassName = `sequence-setting ${rounded ? 'rounded' : ''} ${
+  const containerClassName = `sequence-parameter ${rounded ? 'rounded' : ''} ${
     active ? 'active' : ''
-  } ${className || ''}`;
+  } ${inline ? 'inline' : ''} ${className || ''}`;
 
   return (
     <div
@@ -24,4 +26,4 @@ const SettingContainer = ({
   );
 };
 
-export default SettingContainer;
+export default ParameterContainer;

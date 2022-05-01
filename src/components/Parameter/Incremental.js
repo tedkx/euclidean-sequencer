@@ -2,6 +2,7 @@
 import React from 'react';
 import { func, number } from 'prop-types';
 import { debounce } from 'lodash';
+import './Parameter.less';
 
 const pixelsForValueChange = 10;
 const defaultStep = 1;
@@ -143,9 +144,9 @@ const IncrementalSetting = props => {
   const { elementRef } = useWheelValueChanging(props);
 
   return (
-    <div className="incremental-setting">
+    <div className="incremental-parameter">
       <div
-        className="setting-overlay"
+        className="parameter-overlay"
         onMouseDown={onMouseDown}
         ref={elementRef}
       ></div>
