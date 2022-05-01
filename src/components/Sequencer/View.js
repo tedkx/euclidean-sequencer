@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
+import SequencerGlobalControl from '../SequencerGlobalControl';
 import SequencerSettings from '../SequencerSettings';
 import SequenceDisplay from '../SequenceDisplay';
 import palettes from 'nice-color-palettes/100.json';
-import { PlayCircleOutlined } from '@ant-design/icons';
 
 const colorPalette = [
   '#197278',
@@ -18,11 +18,7 @@ const SequencerView = ({ sequences, ...props }) => {
     <Card
       className="sequencer-container"
       bordered={false}
-      title={
-        <div className="global-control">
-          <PlayCircleOutlined />
-        </div>
-      }
+      title={<SequencerGlobalControl />}
     >
       <div>
         <SequencerSettings
