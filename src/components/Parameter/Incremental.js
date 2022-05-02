@@ -139,9 +139,15 @@ const useClickValueChanging = ({ max, min, onSetValue, value }) => {
 };
 
 const IncrementalSetting = props => {
-  const { value } = props;
+  const { valueFormatter, value } = props;
   const { dragging, onMouseDown } = useClickValueChanging(props);
   const { elementRef } = useWheelValueChanging(props);
+
+  const formattedValue = React.useMemo(
+    () =>
+      typeof valueFormatter === 'function' ? valueFormatter(value) : value,
+    [value, valueFormatter]
+  );
 
   return (
     <div className="incremental-parameter">
@@ -151,7 +157,7 @@ const IncrementalSetting = props => {
         ref={elementRef}
       ></div>
       {dragging && <div className="window-overlay"></div>}
-      {value}
+      {formattedValue}
     </div>
   );
 };
@@ -162,6 +168,7 @@ IncrementalSetting.propTypes = {
   onSetValue: func,
   step: number,
   value: number,
+  valueFormatter: func,
 };
 
 export default IncrementalSetting;

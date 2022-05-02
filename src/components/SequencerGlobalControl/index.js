@@ -2,6 +2,7 @@ import React from 'react';
 import { Select } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
 import { maxMidiNote, minMidiNote, scales } from 'lib/constants';
+import { noteToString } from 'lib/midi';
 import IncrementalParameter from '../Parameter/Incremental';
 import ParameterContainer from '../Parameter/Container';
 
@@ -25,6 +26,7 @@ const SequencerGlobalControl = props => {
             max={maxMidiNote}
             min={minMidiNote}
             value={72}
+            valueFormatter={noteToString}
           />
         </ParameterContainer>
       </div>
