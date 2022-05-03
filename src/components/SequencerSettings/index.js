@@ -17,6 +17,7 @@ const SequencerSettings = ({
         <div className="setting-label">Steps</div>
         <div className="setting-label">Hits</div>
         <div className="setting-label">Offset</div>
+        <div className="setting-label">Note</div>
       </div>
       {sequences.map((sequence, idx) => (
         <SequenceRow

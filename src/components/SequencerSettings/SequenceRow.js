@@ -3,11 +3,13 @@ import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import { PoweroffOutlined } from '@ant-design/icons';
 import IncrementalParameter from '../Parameter/Incremental';
 import ParameterContainer from '../Parameter/Container';
+import { noteToString } from 'lib/midi';
 
 const SequenceRow = ({
   active,
   color,
   offset,
+  note,
   onOffsetChange,
   onStepCountChange,
   onToggleActive,
@@ -51,6 +53,9 @@ const SequenceRow = ({
           value={offset}
         />
       </ParameterContainer>
+      <ParameterContainer active={active} color={color}>
+        <IncrementalParameter value={note} valueFormatter={noteToString} />
+      </ParameterContainer>
     </div>
   );
 };
@@ -58,6 +63,7 @@ const SequenceRow = ({
 SequenceRow.propTypes = {
   active: bool,
   color: string,
+  note: number,
   offset: number,
   onOffsetChange: func,
   onStepCountChange: func,
