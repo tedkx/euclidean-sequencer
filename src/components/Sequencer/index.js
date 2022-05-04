@@ -52,9 +52,18 @@ const Sequencer = () => {
     [setSequences]
   );
 
+  const onNoteChange = React.useCallback(
+    (idx, note) =>
+      setSequences(seqs =>
+        seqs.map((s, i) => (i === idx ? { ...s, note } : s))
+      ),
+    [setSequences]
+  );
+
   return (
     <div>
       <SequencerView
+        onNoteChange={onNoteChange}
         onOffsetChange={onOffsetChange}
         onScaleChange={onScaleChange}
         onStepCountChange={onStepCountChange}
