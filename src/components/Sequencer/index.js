@@ -1,7 +1,9 @@
 import React from 'react';
 import SequencerView from './View';
-import { defaultSequences } from './mockData';
+import { scales } from 'lib/constants';
 import './Sequencer.less';
+
+import { defaultSequences } from './mockData';
 
 window.defaultSequences = defaultSequences;
 
@@ -36,10 +38,25 @@ const Sequencer = () => {
     [setSequences]
   );
 
+  const onScaleChange = React.useCallback(
+    scale =>
+      setSequences(seqs => {
+        let currentNote = seqs[0].note;
+        const intervals = scales[scale].intervals;
+        return seqs.map((seq, idx) => {
+          const newSeq = { ...seq, note: currentNote };
+          currentNote += intervals[idx % intervals.length];
+          return newSeq;
+        });
+      }),
+    [setSequences]
+  );
+
   return (
     <div>
       <SequencerView
         onOffsetChange={onOffsetChange}
+        onScaleChange={onScaleChange}
         onStepCountChange={onStepCountChange}
         onToggleActive={onToggleActive}
         sequences={sequences}

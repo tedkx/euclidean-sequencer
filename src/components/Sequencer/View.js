@@ -13,12 +13,12 @@ const colorPalette = [
   '#84CC92',
 ];
 
-const SequencerView = ({ sequences, ...props }) => {
+const SequencerView = ({ onScaleChange, sequences, ...props }) => {
   return (
     <Card
       className="sequencer-container"
       bordered={false}
-      title={<SequencerGlobalControl />}
+      title={<SequencerGlobalControl onScaleChange={onScaleChange} />}
     >
       <div>
         <SequencerSettings

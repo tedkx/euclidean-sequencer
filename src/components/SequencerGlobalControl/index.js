@@ -14,9 +14,7 @@ const scalesOptions = Object.keys(scales).map(scale => ({
   value: scale,
 }));
 
-const SequencerGlobalControl = props => {
-  const onChange = (...args) => console.log('change', ...args);
-
+const SequencerGlobalControl = ({ onScaleChange }) => {
   return (
     <div className="global-control">
       <div>
@@ -34,7 +32,7 @@ const SequencerGlobalControl = props => {
         Scale:{' '}
         <Select
           defaultValue={defaultScale}
-          onChange={onChange}
+          onChange={onScaleChange}
           options={scalesOptions}
           style={{ width: 120 }}
         ></Select>
