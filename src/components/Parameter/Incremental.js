@@ -49,7 +49,10 @@ const useWheelValueChanging = ({
       const { value, step, min, max } = ref.current;
       const newValue =
         value + step * ref.current.factor * (e.deltaY < 0 ? 1 : -1);
-      onSetValue(Math.min(max, Math.max(min, newValue)));
+      onSetValue(Math.min(max, Math.max(min, newValue)), {
+        changeType: value > newValue ? 'decrease' : 'increase',
+        previousValue: ref.current.value,
+      });
       ref.current.factor += step;
       resetFactor();
     };
@@ -107,7 +110,10 @@ const useClickValueChanging = ({ max, min, onSetValue, value }) => {
           max,
           Math.max(min, ref.current.value + (ref.current.y > e.pageY ? 1 : -1))
         );
-        onSetValue(newValue);
+        onSetValue(newValue, {
+          changeType: ref.current.y < e.pageY ? 'decrease' : 'increase',
+          previousValue: ref.current.value,
+        });
 
         ref.current.justPressed = false;
         ref.current.pixelsMoved = 0;
