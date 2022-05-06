@@ -5,8 +5,31 @@ import './Sequencer.less';
 
 import { defaultSequences } from './mockData';
 
+const useSequencesScale = setSequences => {
+  const [scale, _setScale] = React.useState(scales.dorian.name);
+
+  const onScaleChange = React.useCallback(
+    scale => {
+      _setScale(scale);
+      setSequences(seqs => {
+        let currentNote = seqs[0].note;
+        const intervals = scales[scale].intervals;
+        return seqs.map((seq, idx) => {
+          const newSeq = { ...seq, note: currentNote };
+          currentNote += intervals[idx % intervals.length];
+          return newSeq;
+        });
+      });
+    },
+    [setSequences]
+  );
+
+  return { scale, onScaleChange };
+};
+
 const Sequencer = () => {
   const [sequences, setSequences] = React.useState(defaultSequences);
+  const { onScaleChange } = useSequencesScale(setSequences);
 
   const onToggleActive = React.useCallback(
     idx =>
@@ -33,20 +56,6 @@ const Sequencer = () => {
       setSequences(seqs =>
         seqs.map((s, i) => (i === idx ? { ...s, offset } : s))
       ),
-    [setSequences]
-  );
-
-  const onScaleChange = React.useCallback(
-    scale =>
-      setSequences(seqs => {
-        let currentNote = seqs[0].note;
-        const intervals = scales[scale].intervals;
-        return seqs.map((seq, idx) => {
-          const newSeq = { ...seq, note: currentNote };
-          currentNote += intervals[idx % intervals.length];
-          return newSeq;
-        });
-      }),
     [setSequences]
   );
 
