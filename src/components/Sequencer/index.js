@@ -1,11 +1,15 @@
 import React from 'react';
 import SequencerView from './View';
-import { scales } from 'lib/scales';
+import { scales, setSequencesScale } from 'lib/scales';
 import './Sequencer.less';
 
 import { defaultSequences } from './mockData';
 
-const useSequencesScale = setSequences => {
+const defaultScale = scales.dorian.name;
+const defaultBaseNote = 60;
+
+const useSequences = () => {
+  const [sequences, setSequences] = React.useState(null);
   const [scale, _setScale] = React.useState(scales.dorian.name);
 
   const onScaleChange = React.useCallback(
@@ -24,12 +28,19 @@ const useSequencesScale = setSequences => {
     [setSequences]
   );
 
-  return { scale, onScaleChange };
+  React.useEffect(
+    () =>
+      setSequences(
+        setSequencesScale(defaultSequences, defaultScale, defaultBaseNote)
+      ),
+    []
+  );
+
+  return { onScaleChange, scale, sequences, setSequences };
 };
 
-const Sequencer = () => {
-  const [sequences, setSequences] = React.useState(defaultSequences);
-  const { onScaleChange } = useSequencesScale(setSequences);
+const Sequencer = props => {
+  const { sequences, setSequences, onScaleChange } = useSequences(props);
 
   const onToggleActive = React.useCallback(
     idx =>
@@ -67,7 +78,7 @@ const Sequencer = () => {
     [setSequences]
   );
 
-  return (
+  return sequences ? (
     <div>
       <SequencerView
         onNoteChange={onNoteChange}
@@ -78,7 +89,7 @@ const Sequencer = () => {
         sequences={sequences}
       />
     </div>
-  );
+  ) : null;
 };
 
 export default Sequencer;
