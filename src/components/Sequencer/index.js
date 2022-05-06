@@ -1,11 +1,9 @@
 import React from 'react';
 import SequencerView from './View';
-import { scales } from 'lib/constants';
+import { scales } from 'lib/scales';
 import './Sequencer.less';
 
 import { defaultSequences } from './mockData';
-
-window.defaultSequences = defaultSequences;
 
 const Sequencer = () => {
   const [sequences, setSequences] = React.useState(defaultSequences);

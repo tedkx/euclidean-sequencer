@@ -1,7 +1,8 @@
 import React from 'react';
 import { Select } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { maxMidiNote, minMidiNote, scales } from 'lib/constants';
+import { maxMidiNote, minMidiNote } from 'lib/constants';
+import { scales } from 'lib/scales';
 import { noteToString } from 'lib/midi';
 import IncrementalParameter from '../Parameter/Incremental';
 import ParameterContainer from '../Parameter/Container';
