@@ -11,6 +11,7 @@ const defaultBaseNote = 60;
 const useSequences = () => {
   const [sequences, setSequences] = React.useState(null);
   const [scale, _setScale] = React.useState(scales.dorian.name);
+  const [baseNote, setBaseNote] = React.useState(defaultBaseNote);
 
   const onScaleChange = React.useCallback(
     scale => {
@@ -36,11 +37,19 @@ const useSequences = () => {
     []
   );
 
-  return { onScaleChange, scale, sequences, setSequences };
+  return {
+    baseNote,
+    onScaleChange,
+    scale,
+    sequences,
+    setBaseNote,
+    setSequences,
+  };
 };
 
 const Sequencer = props => {
-  const { sequences, setSequences, onScaleChange } = useSequences(props);
+  const { baseNote, scale, sequences, setSequences, onScaleChange } =
+    useSequences(props);
 
   const onToggleActive = React.useCallback(
     idx =>
@@ -81,11 +90,13 @@ const Sequencer = props => {
   return sequences ? (
     <div>
       <SequencerView
+        baseNote={baseNote}
         onNoteChange={onNoteChange}
         onOffsetChange={onOffsetChange}
         onScaleChange={onScaleChange}
         onStepCountChange={onStepCountChange}
         onToggleActive={onToggleActive}
+        scale={scale}
         sequences={sequences}
       />
     </div>

@@ -7,15 +7,13 @@ import { noteToString } from 'lib/midi';
 import IncrementalParameter from '../Parameter/Incremental';
 import ParameterContainer from '../Parameter/Container';
 
-const defaultScale = 'dorian';
-
 const scalesOptions = Object.keys(scales).map(scale => ({
   key: scale,
   label: scales[scale].title,
   value: scale,
 }));
 
-const SequencerGlobalControl = ({ onScaleChange }) => {
+const SequencerGlobalControl = ({ baseNote, scale, onScaleChange }) => {
   return (
     <div className="global-control">
       <div>
@@ -24,7 +22,7 @@ const SequencerGlobalControl = ({ onScaleChange }) => {
           <IncrementalParameter
             max={maxMidiNote}
             min={minMidiNote}
-            value={72}
+            value={baseNote}
             valueFormatter={noteToString}
           />
         </ParameterContainer>
@@ -32,10 +30,10 @@ const SequencerGlobalControl = ({ onScaleChange }) => {
       <div>
         Scale:{' '}
         <Select
-          defaultValue={defaultScale}
           onChange={onScaleChange}
           options={scalesOptions}
           style={{ width: 120 }}
+          value={scale}
         ></Select>
       </div>
       <PlayCircleOutlined className="play-button" />
