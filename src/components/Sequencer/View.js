@@ -3,15 +3,7 @@ import { Card } from 'antd';
 import SequencerGlobalControl from '../SequencerGlobalControl';
 import SequencerSettings from '../SequencerSettings';
 import SequenceDisplay from '../SequenceDisplay';
-import palettes from 'nice-color-palettes/100.json';
-
-const colorPalette = [
-  '#197278',
-  ...palettes[3].slice(1, 4),
-  '#A4236E',
-  ...palettes[84].slice(0, 4),
-  '#84CC92',
-];
+import { colorPalette } from './constants';
 
 const SequencerView = ({
   baseNote,
