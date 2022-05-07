@@ -15,7 +15,6 @@ const useWheelValueChanging = ({
   value,
 }) => {
   const ref = React.useRef({
-    factor: 1,
     max,
     min,
     step,
@@ -30,14 +29,6 @@ const useWheelValueChanging = ({
     ref.current.max = max;
   }, [value, step, min, max]);
 
-  const resetFactor = React.useMemo(
-    () =>
-      debounce(() => {
-        ref.current.factor = ref.current.step;
-      }, 25),
-    []
-  );
-
   React.useEffect(() => {
     if (typeof onSetValue !== 'function') return;
 
@@ -47,14 +38,11 @@ const useWheelValueChanging = ({
       e.preventDefault();
 
       const { value, step, min, max } = ref.current;
-      const newValue =
-        value + step * ref.current.factor * (e.deltaY < 0 ? 1 : -1);
+      const newValue = value + step * (e.deltaY < 0 ? 1 : -1);
       onSetValue(Math.min(max, Math.max(min, newValue)), {
         changeType: value > newValue ? 'decrease' : 'increase',
         previousValue: ref.current.value,
       });
-      ref.current.factor += step;
-      resetFactor();
     };
 
     elementRef.current.addEventListener('wheel', onWheel, { passive: false });
