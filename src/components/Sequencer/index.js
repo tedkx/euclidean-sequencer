@@ -2,7 +2,7 @@ import React from 'react';
 import SequencerView from './View';
 import { scales, setSequencesScale } from 'lib/scales';
 import './Sequencer.less';
-
+//import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
 
 const defaultScale = scales.dorian.name;
