@@ -1,4 +1,5 @@
 import React from 'react';
+import { array, func, number, string } from 'prop-types';
 import { Card } from 'antd';
 import SequencerGlobalControl from '../SequencerGlobalControl';
 import SequencerSettings from '../SequencerSettings';
@@ -7,6 +8,7 @@ import { colorPalette } from './constants';
 
 const SequencerView = ({
   baseNote,
+  onBaseNoteChange,
   onScaleChange,
   scale,
   sequences,
@@ -19,6 +21,7 @@ const SequencerView = ({
       title={
         <SequencerGlobalControl
           baseNote={baseNote}
+          onBaseNoteChange={onBaseNoteChange}
           onScaleChange={onScaleChange}
           scale={scale}
         />
@@ -36,6 +39,18 @@ const SequencerView = ({
       </div>
     </Card>
   );
+};
+
+SequencerView.propTypes = {
+  baseNote: number,
+  onBaseNoteChange: func,
+  onNoteChange: func,
+  onOffsetChange: func,
+  onScaleChange: func,
+  onStepCountChange: func,
+  onToggleActive: func,
+  scale: string,
+  sequences: array,
 };
 
 export default SequencerView;

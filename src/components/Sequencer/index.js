@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash';
 import SequencerView from './View';
 import { scales, setSequencesScale } from 'lib/scales';
 import './Sequencer.less';
@@ -7,15 +8,17 @@ import { defaultSequences } from './mockData';
 
 const defaultScale = scales.dorian.name;
 const defaultBaseNote = 60;
+const baseNoteChangeDelay = 25;
 
 const useSequences = () => {
   const [sequences, setSequences] = React.useState(null);
-  const [scale, _setScale] = React.useState(scales.dorian.name);
+  const [scale, setScale] = React.useState(scales.dorian.name);
   const [baseNote, setBaseNote] = React.useState(defaultBaseNote);
+  const baseNoteChangeRef = React.useRef({ initialValue: null });
 
   const onScaleChange = React.useCallback(
     scale => {
-      _setScale(scale);
+      setScale(scale);
       setSequences(seqs => {
         let currentNote = seqs[0].note;
         const intervals = scales[scale].intervals;
@@ -29,6 +32,33 @@ const useSequences = () => {
     [setSequences]
   );
 
+  const changeBaseNote = React.useMemo(
+    () =>
+      debounce(baseNote => {
+        const diff = baseNote - baseNoteChangeRef.current.initialValue;
+        baseNoteChangeRef.current.initialValue = null;
+        setBaseNote(baseNote);
+        setSequences(seqs =>
+          seqs.map(s => ({
+            ...s,
+            note: s.note + diff,
+          }))
+        );
+      }, baseNoteChangeDelay),
+    []
+  );
+
+  // keep track of base note changes, debounce call to actual change
+  const onBaseNoteChange = React.useCallback(
+    (baseNote, { previousValue }) => {
+      if (!baseNoteChangeRef.current.initialValue)
+        baseNoteChangeRef.current.initialValue = previousValue;
+
+      changeBaseNote(baseNote);
+    },
+    [changeBaseNote]
+  );
+
   React.useEffect(
     () =>
       setSequences(
@@ -39,17 +69,23 @@ const useSequences = () => {
 
   return {
     baseNote,
+    onBaseNoteChange,
     onScaleChange,
     scale,
     sequences,
-    setBaseNote,
     setSequences,
   };
 };
 
 const Sequencer = props => {
-  const { baseNote, scale, sequences, setSequences, onScaleChange } =
-    useSequences(props);
+  const {
+    baseNote,
+    scale,
+    sequences,
+    setSequences,
+    onBaseNoteChange,
+    onScaleChange,
+  } = useSequences(props);
 
   const onToggleActive = React.useCallback(
     idx =>
@@ -91,6 +127,7 @@ const Sequencer = props => {
     <div>
       <SequencerView
         baseNote={baseNote}
+        onBaseNoteChange={onBaseNoteChange}
         onNoteChange={onNoteChange}
         onOffsetChange={onOffsetChange}
         onScaleChange={onScaleChange}

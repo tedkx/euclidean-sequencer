@@ -1,4 +1,5 @@
 import React from 'react';
+import { func, number, string } from 'prop-types';
 import { Select } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
 import { maxMidiNote, minMidiNote } from 'lib/constants';
@@ -13,7 +14,12 @@ const scalesOptions = Object.keys(scales).map(scale => ({
   value: scale,
 }));
 
-const SequencerGlobalControl = ({ baseNote, scale, onScaleChange }) => {
+const SequencerGlobalControl = ({
+  baseNote,
+  scale,
+  onBaseNoteChange,
+  onScaleChange,
+}) => {
   return (
     <div className="global-control">
       <div>
@@ -22,6 +28,7 @@ const SequencerGlobalControl = ({ baseNote, scale, onScaleChange }) => {
           <IncrementalParameter
             max={maxMidiNote}
             min={minMidiNote}
+            onSetValue={onBaseNoteChange}
             value={baseNote}
             valueFormatter={noteToString}
           />
@@ -39,6 +46,13 @@ const SequencerGlobalControl = ({ baseNote, scale, onScaleChange }) => {
       <PlayCircleOutlined className="play-button" />
     </div>
   );
+};
+
+SequencerGlobalControl.propTypes = {
+  baseNote: number,
+  onBaseNoteChange: func,
+  onScaleChange: func,
+  scale: string,
 };
 
 export default SequencerGlobalControl;
