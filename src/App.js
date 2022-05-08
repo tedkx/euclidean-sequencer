@@ -1,18 +1,14 @@
 import React from 'react';
-import { Layout } from 'antd';
-import Header from 'components/Header';
 import Sequencer from 'components/Sequencer';
 import MidiContextProvider from './components/MidiContext/Provider';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <MidiContextProvider>
       <div className="app">
         <Layout>
-          <Header />
-          <Layout.Content className="content">
-            <Sequencer />
-          </Layout.Content>
+          <Sequencer />
         </Layout>
       </div>
     </MidiContextProvider>
