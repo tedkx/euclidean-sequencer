@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { func, number } from 'prop-types';
-import { debounce } from 'lodash';
 import './Parameter.less';
+import { debounce } from 'lodash';
 
 const pixelsForValueChange = 10;
 const defaultStep = 1;
@@ -32,7 +32,7 @@ const useWheelValueChanging = ({
   React.useEffect(() => {
     if (typeof onSetValue !== 'function') return;
 
-    const onWheel = e => {
+    const onWheel = debounce(e => {
       e.stopPropagation();
       e.stopImmediatePropagation();
       e.preventDefault();
@@ -43,7 +43,8 @@ const useWheelValueChanging = ({
         changeType: value > newValue ? 'decrease' : 'increase',
         previousValue: ref.current.value,
       });
-    };
+      ref.current.value = newValue;
+    }, 5);
 
     elementRef.current.addEventListener('wheel', onWheel, { passive: false });
 
