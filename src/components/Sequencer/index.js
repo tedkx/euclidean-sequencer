@@ -77,6 +77,28 @@ const useSequences = () => {
   };
 };
 
+const useKeyboardEvents = setSequences => {
+  const keyDownHandler = React.useCallback(
+    e => {
+      if (typeof e.key === 'string' && e.key.match(/^\d$/)) {
+        const idx = (parseInt(e.key) || 10) - 1;
+        setSequences(seqs =>
+          seqs.map((s, i) => (i === idx ? { ...s, active: !s.active } : s))
+        );
+      }
+    },
+    [setSequences]
+  );
+
+  React.useEffect(() => {
+    window.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      window.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []); // eslint-disable-line
+};
+
 const Sequencer = props => {
   const {
     baseNote,
@@ -122,6 +144,8 @@ const Sequencer = props => {
       ),
     [setSequences]
   );
+
+  useKeyboardEvents(setSequences);
 
   return sequences ? (
     <div>
