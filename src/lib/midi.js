@@ -1,5 +1,16 @@
 import { notes } from './constants';
 
+const MidiPortState = {
+  Connected: 'connected',
+  Disconnected: 'disconected',
+};
+
+const MidiPortConnection = {
+  Connected: 'connected',
+  Disconnected: 'disconected',
+  Pending: 'pending',
+};
+
 const noteToString = number => {
   const octave = Math.floor(number / notes.length);
   const note = number % notes.length;
@@ -14,4 +25,4 @@ const noteToMidi = str => {
         notes.findIndex(n => n === note.toUpperCase());
 };
 
-export { noteToMidi, noteToString };
+export { MidiPortState, MidiPortConnection, noteToMidi, noteToString };

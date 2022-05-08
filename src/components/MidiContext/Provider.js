@@ -1,13 +1,17 @@
 import React from 'react';
 import MidiContext from './index';
+import { debounce } from 'lodash';
+import { MidiPortState } from 'lib/midi';
 
 const preferredOutputName = 'MODX-1';
+
+const connectionStateChangeDelayMillis = 25;
 
 const defaultContextValue = {
   error: null,
   initialize: null,
+  outputs: [],
   ready: false,
-  selectedInput: null,
   selectedOutput: null,
   sysex: false,
 };
@@ -15,18 +19,55 @@ const defaultContextValue = {
 const MidiContextProvider = ({ children }) => {
   const ref = React.useRef({
     midi: null,
-    selectedInput: null,
+    selectedOutput: null,
   });
 
-  const [contextValue, setContextValue] = React.useState(defaultContextValue);
+  const [contextValue, setContextValue] = React.useState({
+    ...defaultContextValue,
+    onSetOutput: output =>
+      setContextValue(ctx => ({ ...ctx, selectedOutput: output })),
+  });
 
   // Update ref when selected input changed
   React.useEffect(() => {
-    if (contextValue?.selectedInput) {
-      ref.current.selectedInput = contextValue.selectedInput;
+    if (contextValue?.selectedOutput) {
+      ref.current.selectedOutput = contextValue.selectedOutput;
       /// TODO: Change subscriptions accordingly
     }
-  }, [contextValue?.selectedInput]);
+  }, [contextValue?.selectedOutput]);
+
+  // update outputs, check if selected output no longer available
+  const handleConnectionStateChanged = React.useMemo(
+    () =>
+      debounce(() => {
+        console.log('handling connection change');
+        const outputs = Array.from(ref.current.midi.outputs.values()).filter(
+          input => input.state === MidiPortState.Connected
+        );
+        setContextValue(ctx => {
+          const selectedOutputGone = !outputs.some(
+            output => output.name === ctx.selectedOutput?.name
+          );
+
+          return {
+            ...ctx,
+            outputs,
+            selectedOutput: selectedOutputGone
+              ? outputs[0]
+              : ctx.selectedOutput,
+          };
+        });
+      }, connectionStateChangeDelayMillis),
+    []
+  );
+
+  const onConnectionStateChanged = React.useCallback(
+    e => {
+      console.log('connection state changed', e);
+      handleConnectionStateChanged(e);
+    },
+    [handleConnectionStateChanged]
+  );
 
   const initialize = React.useCallback(
     sysex => {
@@ -35,6 +76,8 @@ const MidiContextProvider = ({ children }) => {
         .requestMIDIAccess({ sysex: sysex === true })
         .then(midi => {
           ref.current.midi = midi;
+
+          midi.onstatechange = onConnectionStateChanged;
 
           setContextValue(ctx => {
             const outputs = Array.from(midi.outputs.values()).filter(
@@ -48,7 +91,7 @@ const MidiContextProvider = ({ children }) => {
               sysex: sysex === true,
             };
 
-            // try to preserve previous outpu, if available
+            // try to preserve previous output, if available
             newContext.selectedOutput =
               outputs.find(o => o.id === ctx.selectedOutput) ||
               outputs.find(o => o.name.indexOf(preferredOutputName) >= 0) ||
@@ -66,7 +109,7 @@ const MidiContextProvider = ({ children }) => {
           })
         );
     },
-    [setContextValue]
+    [setContextValue] // eslint-disable-line
   );
 
   React.useEffect(() => {

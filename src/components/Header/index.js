@@ -1,8 +1,28 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Button, Layout } from 'antd';
+import PreferencesModal from './PreferencesModal';
+import { ControlOutlined } from '@ant-design/icons';
 
 const Header = () => {
-  return <Layout.Header></Layout.Header>;
+  const [modalVisible, setModalVisible] = React.useState(false);
+
+  return (
+    <>
+      <Layout.Header>
+        <Button
+          onClick={() => setModalVisible(true)}
+          type="primary"
+          size="large"
+        >
+          Preferences <ControlOutlined />
+        </Button>
+      </Layout.Header>
+      <PreferencesModal
+        onCancel={() => setModalVisible(false)}
+        visible={modalVisible}
+      />
+    </>
+  );
 };
 
 export default Header;
