@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Modal, Select } from 'antd';
 import MidiContext from '../MidiContext';
-import { ReloadOutlined } from '@ant-design/icons';
+import { ControlOutlined, ReloadOutlined } from '@ant-design/icons';
 
 const formatOption = inputOutput => ({
   disabled: inputOutput.state !== 'connected',
@@ -27,15 +27,20 @@ const PreferencesModal = props => {
   return (
     <Modal
       destroyOnClose
-      title="Settings"
       footer={[
         <Button type="primary" onClick={onCancel}>
           Close
         </Button>,
       ]}
+      title={
+        <>
+          <ControlOutlined /> Preferences
+        </>
+      }
+      wrapClassName="preferences-modal"
       {...props}
     >
-      <div>Midi</div>
+      <h3 className="section-title">Midi</h3>
       <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
         <Form.Item label="Output">
           <Select

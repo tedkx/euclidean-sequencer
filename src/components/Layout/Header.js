@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <>
-      <Layout.Header>
+      <Layout.Header className="layout-header">
         <Button
           onClick={() => setModalVisible(true)}
           type="primary"
