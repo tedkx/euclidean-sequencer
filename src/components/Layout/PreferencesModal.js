@@ -40,7 +40,12 @@ const PreferencesModal = props => {
       wrapClassName="preferences-modal"
       {...props}
     >
-      <h3 className="section-title">Midi</h3>
+      <h3 className="section-title">
+        Midi
+        <Button type="primary" onClick={initialize} size="small">
+          Re-Initialize Midi <ReloadOutlined />
+        </Button>
+      </h3>
       <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
         <Form.Item label="Output">
           <Select
@@ -50,11 +55,6 @@ const PreferencesModal = props => {
             value={selectedOutput?.id || null}
           />
         </Form.Item>
-        <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={initialize}>
-            Re-Initialize Midi <ReloadOutlined />
-          </Button>
-        </div>
       </Form>
     </Modal>
   );
