@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { notes } from './constants';
 
 const MidiPortState = {
