@@ -1,53 +1,55 @@
+import { generateEuclideanSequence } from 'lib/utils';
+
 const defaultSequences = [
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
+    steps: generateEuclideanSequence(16, 8),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
+    steps: generateEuclideanSequence(16, 12),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
+    steps: generateEuclideanSequence(16, 12),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
+    steps: generateEuclideanSequence(16, 5),
   },
   {
     active: false,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
+    steps: generateEuclideanSequence(16, 3),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 2 === 0 })),
+    steps: generateEuclideanSequence(16, 8),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 4) - 1 !== 0 })),
+    steps: generateEuclideanSequence(16, 12),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: i % 4 !== 0 })),
+    steps: generateEuclideanSequence(16, 12),
   },
   {
     active: false,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i % 3) - 1 === 0 })),
+    steps: generateEuclideanSequence(16, 5),
   },
   {
     active: true,
     offset: 0,
-    steps: Array.from(Array(16)).map((_, i) => ({ hit: (i + 2) % 5 === 0 })),
+    steps: generateEuclideanSequence(16, 3),
   },
 ];
 

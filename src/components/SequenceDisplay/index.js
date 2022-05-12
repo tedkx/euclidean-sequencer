@@ -20,7 +20,7 @@ const drawCircle = (ctx, radius, strokeColor) => {
   ctx.stroke();
 };
 
-const drawSequenceStep = (ctx, radius, angle, color, hit) => {
+const drawSequenceStep = (ctx, radius, angle, color, { pulse }) => {
   var x = canvasCenter.x + radius * Math.cos((-angle * Math.PI) / 180);
   var y = canvasCenter.y + radius * Math.sin((-angle * Math.PI) / 180);
 
@@ -28,7 +28,7 @@ const drawSequenceStep = (ctx, radius, angle, color, hit) => {
   ctx.beginPath();
   ctx.arc(x, y, stepSize, 0, 2 * Math.PI);
   ctx.lineWidth = lineWidth;
-  if (hit) {
+  if (pulse) {
     ctx.fillStyle = color;
   } else {
     ctx.fillStyle = cardBackground;
@@ -55,10 +55,8 @@ const SequenceDisplay = ({ colorPalette, sequences }) => {
           drawCircle(ctx, radius, active ? colorPalette[i] : color);
 
           const angleStep = 360 / steps.length;
-          for (let si = 0; si < steps.length; si++) {
-            const { hit } = steps[si];
-            drawSequenceStep(ctx, radius, si * angleStep, color, hit);
-          }
+          for (let si = 0; si < steps.length; si++)
+            drawSequenceStep(ctx, radius, si * angleStep, color, steps[si]);
         }
       }
     }
@@ -80,7 +78,7 @@ SequenceDisplay.propTypes = {
       active: bool,
       steps: arrayOf(
         shape({
-          hit: bool,
+          pulse: bool,
           velocity: number,
         })
       ),

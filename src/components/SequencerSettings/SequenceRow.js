@@ -17,9 +17,9 @@ const SequenceRow = ({
   onToggleActive,
   steps,
 }) => {
-  const { stepCount, hits } = React.useMemo(
+  const { stepCount, pulses } = React.useMemo(
     () => ({
-      hits: steps.filter(s => s.hit).length,
+      pulses: steps.filter(s => s.pulse).length,
       offset,
       stepCount: steps.length,
     }),
@@ -45,7 +45,7 @@ const SequenceRow = ({
         />
       </ParameterContainer>
       <ParameterContainer active={active} color={color}>
-        <IncrementalParameter max={stepCount} min={0} value={hits} />
+        <IncrementalParameter max={stepCount} min={0} value={pulses} />
       </ParameterContainer>
       <ParameterContainer active={active} color={color}>
         <IncrementalParameter
@@ -76,7 +76,7 @@ SequenceRow.propTypes = {
   onOffsetChange: func,
   onStepCountChange: func,
   onToggleActive: func,
-  steps: arrayOf(shape({ hit: bool })),
+  steps: arrayOf(shape({ pulse: bool })),
 };
 
 export default SequenceRow;
