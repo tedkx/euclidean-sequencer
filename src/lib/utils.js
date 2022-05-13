@@ -1,4 +1,5 @@
 const defaultOpts = {
+  offset: 0,
   startWithPulse: true,
   stepFormatter: (pulse, opts) => ({
     pulse,
@@ -9,7 +10,7 @@ const defaultOpts = {
 
 const generateEuclideanSequence = (total, pulses, opts) => {
   const options = { ...defaultOpts, ...opts };
-  const { startWithPulse, stepFormatter } = options;
+  const { offset, startWithPulse, stepFormatter } = options;
   const arr = Array.from(Array(total));
 
   let bucket = 0;
@@ -24,11 +25,17 @@ const generateEuclideanSequence = (total, pulses, opts) => {
     }
   }
 
+  // offset takes precedence over `startWithPulse`
+  if (offset) {
+    const offsetSlice = arr.splice(offset * -1, arr.length);
+    return offsetSlice.concat(arr);
+  }
+
   if (!startWithPulse) return arr;
 
   const slice = arr.splice(
     0,
-    arr.findIndex(item => item > 0)
+    arr.findIndex(a => a > 0)
   );
   return arr.concat(slice);
 };
