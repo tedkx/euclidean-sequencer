@@ -17,7 +17,7 @@ const generateEuclideanSequence = (total, pulses, opts) => {
 
   for (let stepIdx = 0; stepIdx < total; stepIdx++) {
     bucket += pulses;
-    if (bucket > total) {
+    if (bucket >= total) {
       arr[stepIdx] = stepFormatter(true, options);
       bucket -= total;
     } else {
