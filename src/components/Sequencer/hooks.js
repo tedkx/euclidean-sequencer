@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import { scales, setSequencesScale } from 'lib/scales';
+import { generateEuclideanRhythm } from 'lib/utils';
 //import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
 import './Sequencer.less';
@@ -20,14 +21,21 @@ const useSequences = () => {
     [setSequences]
   );
 
+  // generate a new euclidean rhythum, ensuring that pulses are <= new value
   const onStepCountChange = useCallback(
     (idx, value) =>
       setSequences(seqs =>
-        seqs.map((s, i) =>
-          i === idx
-            ? { ...s, steps: defaultSequences[idx].steps.slice(0, value) }
-            : s
-        )
+        seqs.map((s, i) => {
+          if (i !== idx) return s;
+          const pulses = Math.min(
+            s.steps.filter(item => item.pulse).length,
+            value
+          );
+          return {
+            ...s,
+            steps: generateEuclideanRhythm(value, pulses),
+          };
+        })
       ),
     [setSequences]
   );
