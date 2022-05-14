@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import { scales, setSequencesScale } from 'lib/scales';
-import './Sequencer.less';
 //import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
+import './Sequencer.less';
 
 const defaultScale = scales.dorian.name;
 const defaultBaseNote = 60;
@@ -11,6 +11,11 @@ const baseNoteChangeDelay = 25;
 
 const useSequences = () => {
   const [sequences, setSequences] = useState(null);
+
+  return { sequences, setSequences };
+};
+
+const useGlobalControlHandlers = setSequences => {
   const [scale, setScale] = useState(scales.dorian.name);
   const [baseNote, setBaseNote] = useState(defaultBaseNote);
   const baseNoteChangeRef = useRef({ initialValue: null });
@@ -71,7 +76,6 @@ const useSequences = () => {
     onBaseNoteChange,
     onScaleChange,
     scale,
-    sequences,
     setSequences,
   };
 };
@@ -98,4 +102,4 @@ const useKeyboardEvents = setSequences => {
   }, []); // eslint-disable-line
 };
 
-export { useKeyboardEvents, useSequences };
+export { useGlobalControlHandlers, useKeyboardEvents, useSequences };

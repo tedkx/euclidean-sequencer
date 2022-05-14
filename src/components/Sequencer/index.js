@@ -3,17 +3,16 @@ import SequencerView from './View';
 import './Sequencer.less';
 //import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
-import { useKeyboardEvents, useSequences } from './hooks';
+import {
+  useGlobalControlHandlers,
+  useKeyboardEvents,
+  useSequences,
+} from './hooks';
 
-const Sequencer = props => {
-  const {
-    baseNote,
-    scale,
-    sequences,
-    setSequences,
-    onBaseNoteChange,
-    onScaleChange,
-  } = useSequences(props);
+const Sequencer = () => {
+  const { sequences, setSequences } = useSequences();
+  const { baseNote, scale, onBaseNoteChange, onScaleChange } =
+    useGlobalControlHandlers(setSequences);
 
   const onToggleActive = React.useCallback(
     idx =>
