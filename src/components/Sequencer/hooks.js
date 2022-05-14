@@ -12,7 +12,50 @@ const baseNoteChangeDelay = 25;
 const useSequences = () => {
   const [sequences, setSequences] = useState(null);
 
-  return { sequences, setSequences };
+  const onToggleActive = useCallback(
+    idx =>
+      setSequences(seqs =>
+        seqs.map((s, i) => (i === idx ? { ...s, active: !s.active } : s))
+      ),
+    [setSequences]
+  );
+
+  const onStepCountChange = useCallback(
+    (idx, value) =>
+      setSequences(seqs =>
+        seqs.map((s, i) =>
+          i === idx
+            ? { ...s, steps: defaultSequences[idx].steps.slice(0, value) }
+            : s
+        )
+      ),
+    [setSequences]
+  );
+
+  const onOffsetChange = useCallback(
+    (idx, offset) =>
+      setSequences(seqs =>
+        seqs.map((s, i) => (i === idx ? { ...s, offset } : s))
+      ),
+    [setSequences]
+  );
+
+  const onNoteChange = useCallback(
+    (idx, note) =>
+      setSequences(seqs =>
+        seqs.map((s, i) => (i === idx ? { ...s, note } : s))
+      ),
+    [setSequences]
+  );
+
+  return {
+    onNoteChange,
+    onOffsetChange,
+    onStepCountChange,
+    onToggleActive,
+    sequences,
+    setSequences,
+  };
 };
 
 const useGlobalControlHandlers = setSequences => {
@@ -80,6 +123,7 @@ const useGlobalControlHandlers = setSequences => {
   };
 };
 
+// handles number presses for activating/deactivating sequences
 const useKeyboardEvents = setSequences => {
   const keyDownHandler = useCallback(
     e => {
