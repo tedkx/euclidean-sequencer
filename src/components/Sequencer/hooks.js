@@ -100,7 +100,7 @@ const useGlobalControlHandlers = setSequences => {
           }))
         );
       }, baseNoteChangeDelay),
-    []
+    [setSequences]
   );
 
   // keep track of base note changes, debounce call to actual change
@@ -119,7 +119,7 @@ const useGlobalControlHandlers = setSequences => {
       setSequences(
         setSequencesScale(defaultSequences, defaultScale, defaultBaseNote)
       ),
-    []
+    [] // eslint-disable-line
   );
 
   return {
