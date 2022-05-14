@@ -8,7 +8,12 @@ const defaultOpts = {
   velocity: 127,
 };
 
-const generateEuclideanSequence = (total, pulses, opts) => {
+const offsetPatternSteps = (stepsArr, offset) => {
+  const offsetSlice = stepsArr.splice(offset * -1, stepsArr.length);
+  return offsetSlice.concat(stepsArr);
+};
+
+const generateEuclideanRhythm = (total, pulses, opts) => {
   const options = { ...defaultOpts, ...opts };
   const { offset, startWithPulse, stepFormatter } = options;
   const arr = Array.from(Array(total));
@@ -26,10 +31,7 @@ const generateEuclideanSequence = (total, pulses, opts) => {
   }
 
   // offset takes precedence over `startWithPulse`
-  if (offset) {
-    const offsetSlice = arr.splice(offset * -1, arr.length);
-    return offsetSlice.concat(arr);
-  }
+  if (offset) return offsetPatternSteps(arr, offset);
 
   if (!startWithPulse) return arr;
 
@@ -40,4 +42,4 @@ const generateEuclideanSequence = (total, pulses, opts) => {
   return arr.concat(slice);
 };
 
-export { generateEuclideanSequence };
+export { generateEuclideanRhythm, offsetPatternSteps };

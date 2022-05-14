@@ -1,12 +1,12 @@
 import palettes from 'nice-color-palettes/100.json';
-import { generateEuclideanSequence } from 'lib/utils';
+import { generateEuclideanRhythm } from 'lib/utils';
 
 const totalSequences = 10;
 
 const defaultSequences = Array.from(Array(totalSequences)).map(() => ({
   active: false,
   offset: 0,
-  steps: generateEuclideanSequence(16, 0),
+  steps: generateEuclideanRhythm(16, 0),
 }));
 
 const colorPalette = [
