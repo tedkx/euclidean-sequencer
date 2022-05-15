@@ -16,7 +16,7 @@ const SequencerSettings = ({
     <div className="settings-labels-container">
       <div className="setting-label"></div>
       <div className="setting-label">Steps</div>
-      <div className="setting-label">Hits</div>
+      <div className="setting-label">Pulses</div>
       <div className="setting-label">Offset</div>
       <div className="setting-label">Note</div>
     </div>
