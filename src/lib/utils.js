@@ -9,8 +9,9 @@ const defaultOpts = {
 };
 
 const offsetPatternSteps = (stepsArr, offset) => {
-  const offsetSlice = stepsArr.splice(offset * -1, stepsArr.length);
-  return offsetSlice.concat(stepsArr);
+  const arrCopy = [...stepsArr];
+  const offsetSlice = arrCopy.splice(offset * -1, arrCopy.length);
+  return offsetSlice.concat(arrCopy);
 };
 
 const generateEuclideanRhythm = (total, pulses, opts) => {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import { scales, setSequencesScale } from 'lib/scales';
-import { generateEuclideanRhythm } from 'lib/utils';
+import { generateEuclideanRhythm, offsetPatternSteps } from 'lib/utils';
 //import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
 import './Sequencer.less';
@@ -43,7 +43,15 @@ const useSequences = () => {
   const onOffsetChange = useCallback(
     (idx, offset) =>
       setSequences(seqs =>
-        seqs.map((s, i) => (i === idx ? { ...s, offset } : s))
+        seqs.map((s, i) => {
+          if (i !== idx) return s;
+          if (Math.abs(offset) > s.steps.length) return s;
+          return {
+            ...s,
+            offset,
+            steps: offsetPatternSteps(s.steps, offset - s.offset),
+          };
+        })
       ),
     [setSequences]
   );
