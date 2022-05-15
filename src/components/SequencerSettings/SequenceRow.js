@@ -49,8 +49,8 @@ const SequenceRow = ({
       </ParameterContainer>
       <ParameterContainer active={active} color={color}>
         <IncrementalParameter
-          max={24}
-          min={-24}
+          max={Math.min(24, stepCount)}
+          min={Math.max(-24, stepCount * -1)}
           onSetValue={onOffsetChange}
           value={offset}
         />

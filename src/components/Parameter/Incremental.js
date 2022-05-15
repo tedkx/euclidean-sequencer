@@ -43,7 +43,7 @@ const useWheelValueChanging = ({
         changeType: value > newValue ? 'decrease' : 'increase',
         previousValue: ref.current.value,
       });
-      ref.current.value = newValue;
+      if (newValue <= max && newValue >= min) ref.current.value = newValue;
     }, 5);
 
     elementRef.current.addEventListener('wheel', onWheel, { passive: false });
