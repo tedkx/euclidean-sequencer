@@ -46,6 +46,7 @@ SequencerView.propTypes = {
   onBaseNoteChange: func,
   onNoteChange: func,
   onOffsetChange: func,
+  onPulsesCountChange: func,
   onScaleChange: func,
   onStepCountChange: func,
   onToggleActive: func,

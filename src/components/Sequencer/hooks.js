@@ -40,6 +40,23 @@ const useSequences = () => {
     [setSequences]
   );
 
+  // generate a new euclidean rhythum, ensuring that new pulses are <= step count
+  const onPulsesCountChange = useCallback(
+    (idx, value) =>
+      setSequences(seqs =>
+        seqs.map((s, i) => {
+          if (i !== idx) return s;
+          if (value > s.steps.length) return s;
+
+          return {
+            ...s,
+            steps: generateEuclideanRhythm(s.steps.length, value),
+          };
+        })
+      ),
+    [setSequences]
+  );
+
   const onOffsetChange = useCallback(
     (idx, offset) =>
       setSequences(seqs =>
@@ -67,6 +84,7 @@ const useSequences = () => {
   return {
     onNoteChange,
     onOffsetChange,
+    onPulsesCountChange,
     onStepCountChange,
     onToggleActive,
     sequences,

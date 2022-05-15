@@ -7,6 +7,7 @@ const SequencerSettings = ({
   colorPalette,
   onNoteChange,
   onOffsetChange,
+  onPulsesCountChange,
   onStepCountChange,
   onToggleActive,
   sequences,
@@ -26,6 +27,7 @@ const SequencerSettings = ({
         key={idx}
         onNoteChange={value => onNoteChange(idx, value)}
         onOffsetChange={value => onOffsetChange(idx, value)}
+        onPulsesCountChange={value => onPulsesCountChange(idx, value)}
         onStepCountChange={value => onStepCountChange(idx, value)}
         onToggleActive={() => onToggleActive(idx)}
       />
@@ -37,6 +39,7 @@ SequencerSettings.propTypes = {
   colorPalette: arrayOf(string),
   onNoteChange: func,
   onOffsetChange: func,
+  onPulsesCountChange: func,
   onStepCountChange: func,
   onToggleActive: func,
   sequences: array,

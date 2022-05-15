@@ -13,6 +13,7 @@ const SequenceRow = ({
   note,
   onNoteChange,
   onOffsetChange,
+  onPulsesCountChange,
   onStepCountChange,
   onToggleActive,
   steps,
@@ -45,7 +46,12 @@ const SequenceRow = ({
         />
       </ParameterContainer>
       <ParameterContainer active={active} color={color}>
-        <IncrementalParameter max={stepCount} min={0} value={pulses} />
+        <IncrementalParameter
+          max={stepCount}
+          min={0}
+          onSetValue={onPulsesCountChange}
+          value={pulses}
+        />
       </ParameterContainer>
       <ParameterContainer active={active} color={color}>
         <IncrementalParameter
@@ -74,6 +80,7 @@ SequenceRow.propTypes = {
   note: number,
   offset: number,
   onOffsetChange: func,
+  onPulsesCountChange: func,
   onStepCountChange: func,
   onToggleActive: func,
   steps: arrayOf(shape({ pulse: bool })),

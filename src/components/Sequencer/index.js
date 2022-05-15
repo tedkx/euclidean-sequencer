@@ -11,6 +11,7 @@ const Sequencer = () => {
   const {
     onNoteChange,
     onOffsetChange,
+    onPulsesCountChange,
     onStepCountChange,
     onToggleActive,
     sequences,
@@ -28,6 +29,7 @@ const Sequencer = () => {
         onBaseNoteChange={onBaseNoteChange}
         onNoteChange={onNoteChange}
         onOffsetChange={onOffsetChange}
+        onPulsesCountChange={onPulsesCountChange}
         onScaleChange={onScaleChange}
         onStepCountChange={onStepCountChange}
         onToggleActive={onToggleActive}
