@@ -28,7 +28,7 @@ const PreferencesModal = props => {
     <Modal
       destroyOnClose
       footer={[
-        <Button type="primary" onClick={onCancel}>
+        <Button key="close" type="primary" onClick={onCancel}>
           Close
         </Button>,
       ]}
