@@ -9,7 +9,7 @@ const worker = () => {
 
   self.onmessage = e => {
     console.log('message', e);
-    if (e.data === 'start') {
+    if (e.data === 'start' && timerID === null) {
       timerID = scheduleTick(intervalMillis);
     } else if (e.data === 'stop') {
       clearInterval(timerID);

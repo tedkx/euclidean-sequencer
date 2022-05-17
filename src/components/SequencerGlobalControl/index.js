@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, number, string } from 'prop-types';
+import { bool, func, number, string } from 'prop-types';
 import { Select } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
 import { maxMidiNote, minMidiNote } from 'lib/constants';
@@ -19,6 +19,8 @@ const SequencerGlobalControl = ({
   scale,
   onBaseNoteChange,
   onScaleChange,
+  onTogglePlay,
+  playing,
 }) => {
   return (
     <div className="global-control">
@@ -43,7 +45,10 @@ const SequencerGlobalControl = ({
           value={scale}
         ></Select>
       </div>
-      <PlayCircleOutlined className="play-button" />
+      <PlayCircleOutlined
+        className={`play-button ${playing ? 'playing' : ''}`}
+        onClick={onTogglePlay}
+      />
     </div>
   );
 };
@@ -52,6 +57,8 @@ SequencerGlobalControl.propTypes = {
   baseNote: number,
   onBaseNoteChange: func,
   onScaleChange: func,
+  onTogglePlay: func,
+  playing: bool,
   scale: string,
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { array, func, number, string } from 'prop-types';
+import { array, bool, func, number, string } from 'prop-types';
 import { Card } from 'antd';
 import SequencerGlobalControl from '../SequencerGlobalControl';
 import SequencerSettings from '../SequencerSettings';
@@ -10,6 +10,8 @@ const SequencerView = ({
   baseNote,
   onBaseNoteChange,
   onScaleChange,
+  onTogglePlay,
+  playing,
   scale,
   sequences,
   ...props
@@ -23,6 +25,8 @@ const SequencerView = ({
           baseNote={baseNote}
           onBaseNoteChange={onBaseNoteChange}
           onScaleChange={onScaleChange}
+          onTogglePlay={onTogglePlay}
+          playing={playing}
           scale={scale}
         />
       }
@@ -50,6 +54,8 @@ SequencerView.propTypes = {
   onScaleChange: func,
   onStepCountChange: func,
   onToggleActive: func,
+  onTogglePlay: func,
+  playing: bool,
   scale: string,
   sequences: array,
 };
