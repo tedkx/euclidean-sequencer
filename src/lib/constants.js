@@ -4,8 +4,10 @@ const noteOnStart = 144;
 const minMidiNote = 0;
 const maxMidiNote = 127;
 const numOfChannels = 16;
+const defaultBpm = 90;
 
 export {
+  defaultBpm,
   maxMidiNote,
   minMidiNote,
   noteOnStart,

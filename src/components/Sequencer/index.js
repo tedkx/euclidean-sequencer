@@ -3,10 +3,10 @@ import SequencerView from './View';
 import './Sequencer.less';
 import {
   useGlobalControlHandlers,
-  useIntervalWorker,
   useKeyboardEvents,
   useSequences,
 } from './handlers';
+import { useScheduler } from './scheduler';
 
 const Sequencer = () => {
   const {
@@ -23,7 +23,7 @@ const Sequencer = () => {
 
   useKeyboardEvents(setSequences);
 
-  const { onTogglePlay, playing } = useIntervalWorker();
+  const { onTogglePlay, playing } = useScheduler();
 
   return sequences ? (
     <div>
