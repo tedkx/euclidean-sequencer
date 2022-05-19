@@ -4,11 +4,7 @@ import { scales, setSequencesScale } from 'lib/scales';
 import { generateEuclideanRhythm, offsetPatternSteps } from 'lib/utils';
 //import { defaultSequences } from './constants';
 import { defaultSequences } from './mockData';
-import WorkerBuilder from 'worker/WorkerBuilder';
-import IntervalWorker from 'worker/interval.worker';
 import './Sequencer.less';
-
-const intervalWorkerInstance = new WorkerBuilder(IntervalWorker);
 
 const defaultScale = scales.dorian.name;
 const defaultBaseNote = 60;
@@ -184,34 +180,4 @@ const useKeyboardEvents = setSequences => {
   }, []); // eslint-disable-line
 };
 
-const useIntervalWorker = () => {
-  const [playing, setPlaying] = useState(false);
-
-  const onTogglePlay = useCallback(
-    () =>
-      setPlaying(current => {
-        const newValue = !current;
-        intervalWorkerInstance.postMessage(newValue ? 'start' : 'stop');
-        return newValue;
-      }),
-    []
-  );
-
-  useEffect(() => {
-    intervalWorkerInstance.onmessage = msg => {
-      console.log(msg?.type, 'from interval worker:', msg?.data);
-    };
-  }, []);
-
-  return {
-    onTogglePlay,
-    playing,
-  };
-};
-
-export {
-  useGlobalControlHandlers,
-  useIntervalWorker,
-  useKeyboardEvents,
-  useSequences,
-};
+export { useGlobalControlHandlers, useKeyboardEvents, useSequences };

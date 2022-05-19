@@ -8,10 +8,11 @@ const intervalWorkerInstance = new WorkerBuilder(IntervalWorker);
 const useScheduler = sequences => {
   const [playing, setPlaying] = useState(false);
   const schedulerRef = useRef({
-    currentTime: null,
+    currentStepTime: null,
     sequences,
     sequenceTimings: null,
     stepDuration: null,
+    stepIdx: null,
   });
 
   // update ref sequence data when sequences changed
@@ -23,13 +24,30 @@ const useScheduler = sequences => {
     }
   }, [sequences]);
 
+  const schedule = useCallback(initial => {
+    const prepareForStep = schedulerRef.current.stepIdx + (initial ? 0 : 1);
+    const currentTime = window.performance.now();
+
+    const { sequences, sequenceTimings } = schedulerRef.current;
+    for (let seqIdx; seqIdx < sequenceTimings.length; seqIdx++) {
+      if (!sequences[seqIdx].active) continue;
+
+      const { scheduledUntil } = sequenceTimings[seqIdx];
+      //if(scheduledUntil)
+    }
+  }, []);
+
   useEffect(() => {
     if (playing) {
       schedulerRef.current.stepDuration = (60 * 1000) / ((defaultBpm * 16) / 4);
+      schedulerRef.current.stepIdx = 0;
+      schedulerRef.current.nextStepTime = window.performance.now();
+      schedule(true);
     } else {
       schedulerRef.current.stepDuration = null;
+      schedulerRef.current.stepIdx = null;
     }
-  }, [playing]);
+  }, [playing, schedule]);
 
   const onTogglePlay = useCallback(
     () =>
