@@ -10,11 +10,15 @@ const connectionStateChangeDelayMillis = 25;
 const defaultContextValue = {
   error: null,
   initialize: null,
+  onSetOutput: () => {},
   outputs: [],
   ready: false,
   selectedOutput: null,
   sysex: false,
 };
+
+const getOutputSetter = setContextValue => output =>
+  setContextValue(ctx => ({ ...ctx, selectedOutput: output }));
 
 const MidiContextProvider = ({ children }) => {
   const ref = React.useRef({
@@ -22,11 +26,7 @@ const MidiContextProvider = ({ children }) => {
     selectedOutput: null,
   });
 
-  const [contextValue, setContextValue] = React.useState({
-    ...defaultContextValue,
-    onSetOutput: output =>
-      setContextValue(ctx => ({ ...ctx, selectedOutput: output })),
-  });
+  const [contextValue, setContextValue] = React.useState(defaultContextValue);
 
   // Update ref when selected input changed
   React.useEffect(() => {
@@ -61,14 +61,6 @@ const MidiContextProvider = ({ children }) => {
     []
   );
 
-  const onConnectionStateChanged = React.useCallback(
-    e => {
-      console.log('connection state changed', e);
-      handleConnectionStateChanged(e);
-    },
-    [handleConnectionStateChanged]
-  );
-
   const initialize = React.useCallback(
     sysex => {
       setContextValue(defaultContextValue);
@@ -77,7 +69,7 @@ const MidiContextProvider = ({ children }) => {
         .then(midi => {
           ref.current.midi = midi;
 
-          midi.onstatechange = onConnectionStateChanged;
+          midi.onstatechange = handleConnectionStateChanged;
 
           setContextValue(ctx => {
             const outputs = Array.from(midi.outputs.values()).filter(
@@ -97,6 +89,8 @@ const MidiContextProvider = ({ children }) => {
               outputs.find(o => o.name.indexOf(preferredOutputName) >= 0) ||
               outputs[0] ||
               null;
+
+            newContext.onSetOutput = getOutputSetter(setContextValue);
 
             return newContext;
           });
