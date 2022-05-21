@@ -5,22 +5,32 @@ import IntervalWorker from 'worker/interval.worker';
 
 const intervalWorkerInstance = new WorkerBuilder(IntervalWorker);
 
+/**
+ * Sequence type
+ * @typedef {Object} Sequence
+ * @property {bool} active
+ * @property {number} offset
+ * @property {Array<Object>} steps - [{ pulse, velocity }]
+ * @property {number} note
+ */
+
 /** Calculates the step duration in milliseconds, based on bpm and noteValue
  * The division by 4 is because bpm usually concertns quarter notes.
  */
 const calculateStepDuration = (bpm, noteValue) =>
-  (60 * 1000) / ((defaultBpm * noteValue) / 4);
+  (60 * 1000) / ((bpm * noteValue) / 4);
 
-/* Given an array of sequences, containing note, pulse and velocity,
+/**Given an array of sequences, containing note, pulse and velocity,
  * schedule notes to be played on the next sequencer step. The scheduling
  * is performed during the next `t + stepDuration` window
+ * @param {Array<Sequence>} sequences
  */
 const useScheduler = sequences => {
   const [playing, setPlaying] = useState(false);
   const schedulerRef = useRef({
     currentStepTime: null,
     sequences,
-    sequenceTimings: null,
+    sequenceTimings: null, // [{ scheduledUntil }]
     stepDuration: null,
     stepIdx: null,
   });
@@ -34,31 +44,23 @@ const useScheduler = sequences => {
     }
   }, [sequences]);
 
-  const schedule = useCallback(initial => {
+  const schedule = useCallback(initialTime => {
     const { currentStepTime, sequences, sequenceTimings, stepDuration } =
       schedulerRef.current;
 
-    console.log('tick', initial);
+    const currentTime = initialTime || window.performance.now();
+    const nextStepTime = currentStepTime + stepDuration;
 
-    // const prepareForStep = schedulerRef.current.stepIdx + (initial ? 0 : 1);
-    const currentTime = window.performance.now();
-
-    if (currentTime > currentStepTime + stepDuration) {
+    // advance step if time elapsed
+    if (currentTime > nextStepTime) {
       schedulerRef.current.stepIdx++;
-      schedulerRef.current.currentStepTime += stepDuration;
+      schedulerRef.current.currentStepTime = nextStepTime;
       console.log(
         'step',
         schedulerRef.current.stepIdx,
         schedulerRef.current.currentStepTime
       );
     }
-
-    // for (let seqIdx; seqIdx < sequenceTimings.length; seqIdx++) {
-    //   if (!sequences[seqIdx].active) continue;
-
-    //   const { scheduledUntil } = sequenceTimings[seqIdx];
-    //   if(scheduledUntil)
-    // }
   }, []);
 
   useEffect(() => {
@@ -70,7 +72,7 @@ const useScheduler = sequences => {
       schedulerRef.current.stepIdx = 0;
       schedulerRef.current.currentStepTime = window.performance.now();
       console.log('beginning, duration:', schedulerRef.current.stepDuration);
-      schedule(true);
+      schedule(schedulerRef.current.currentStepTime);
     } else {
       schedulerRef.current.stepDuration = null;
       schedulerRef.current.stepIdx = null;
