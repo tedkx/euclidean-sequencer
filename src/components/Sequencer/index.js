@@ -23,7 +23,7 @@ const Sequencer = () => {
 
   useKeyboardEvents(setSequences);
 
-  const { onTogglePlay, playing } = useScheduler();
+  const { onTogglePlay, playing } = useScheduler(sequences);
 
   return sequences ? (
     <div>

@@ -20,6 +20,53 @@ const intervalWorkerInstance = new WorkerBuilder(IntervalWorker);
 const calculateStepDuration = (bpm, noteValue) =>
   (60 * 1000) / ((bpm * noteValue) / 4);
 
+const createPlayableNote = (note, velocity, timestamp) => ({
+  note,
+  velocity,
+  timestamp,
+});
+
+const getNotesToPlay = (sequences, forTimestamp, isInitial, schedulerRef) => {
+  const { sequenceTimings, stepIdx } = schedulerRef.current;
+  const notesToPlay = [];
+
+  for (let seqIdx = 0; seqIdx < sequenceTimings.length; seqIdx++) {
+    const sequence = sequences[seqIdx];
+    if (!sequence.active) continue;
+
+    const sequenceTiming = sequenceTimings[seqIdx];
+    if (
+      !sequenceTiming.scheduledUntil ||
+      sequenceTiming.scheduledUntil < forTimestamp
+    ) {
+      sequenceTiming.scheduledUntil = forTimestamp;
+
+      const sequenceStep =
+        sequence.steps[(stepIdx + (isInitial ? 0 : 1)) % sequence.steps.length];
+
+      console.log(
+        'calculating for',
+        isInitial ? 'initial' : '',
+        forTimestamp,
+        'step',
+        sequenceStep
+      );
+      if (sequenceStep.pulse)
+        notesToPlay.push(
+          createPlayableNote(
+            sequence.note,
+            sequenceStep.velocity,
+            sequenceTiming.scheduledUntil
+          )
+        );
+    }
+
+    break;
+  }
+
+  return notesToPlay;
+};
+
 /**Given an array of sequences, containing note, pulse and velocity,
  * schedule notes to be played on the next sequencer step. The scheduling
  * is performed during the next `t + stepDuration` window
@@ -40,13 +87,14 @@ const useScheduler = sequences => {
     if (sequences) {
       schedulerRef.current.sequences = sequences;
       if (!schedulerRef.current.sequenceTimings)
-        schedulerRef.current.sequences = sequences.map(() => null);
+        schedulerRef.current.sequenceTimings = sequences.map(() => ({
+          scheduledUntil: null,
+        }));
     }
   }, [sequences]);
 
   const schedule = useCallback(initialTime => {
-    const { currentStepTime, sequences, sequenceTimings, stepDuration } =
-      schedulerRef.current;
+    const { currentStepTime, sequences, stepDuration } = schedulerRef.current;
 
     const currentTime = initialTime || window.performance.now();
     const nextStepTime = currentStepTime + stepDuration;
@@ -61,6 +109,16 @@ const useScheduler = sequences => {
         schedulerRef.current.currentStepTime
       );
     }
+
+    // determine notes to play, update `scheduledUntil` timings per sequence
+    const notesToPlay = getNotesToPlay(
+      sequences,
+      initialTime || nextStepTime,
+      !!initialTime,
+      schedulerRef // sequenceTimings will be updated by ref
+    );
+
+    if (notesToPlay.length > 0) console.log('notesToPlay', notesToPlay);
   }, []);
 
   useEffect(() => {
@@ -71,7 +129,6 @@ const useScheduler = sequences => {
       );
       schedulerRef.current.stepIdx = 0;
       schedulerRef.current.currentStepTime = window.performance.now();
-      console.log('beginning, duration:', schedulerRef.current.stepDuration);
       schedule(schedulerRef.current.currentStepTime);
     } else {
       schedulerRef.current.stepDuration = null;
