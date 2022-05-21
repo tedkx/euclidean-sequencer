@@ -26,37 +26,37 @@ const createPlayableNote = (note, velocity, timestamp) => ({
   timestamp,
 });
 
+/**
+ * Determines which notes to play, updating the sequencesScheduledUntil timestamps
+ * @param {Array<Sequence>} sequences - Teh sequencez
+ * @param {number} forTimestamp - High definition timestamp to schedule note for
+ * @param {boolean} isInitial - Whether it's the first sequence tick
+ * @param {Object} schedulerRef - ref to get stepIdx and update scheduled untils
+ * @returns
+ */
 const getNotesToPlay = (sequences, forTimestamp, isInitial, schedulerRef) => {
-  const { sequenceTimings, stepIdx } = schedulerRef.current;
+  const { sequencesScheduledUntil, stepIdx } = schedulerRef.current;
   const notesToPlay = [];
 
-  for (let seqIdx = 0; seqIdx < sequenceTimings.length; seqIdx++) {
+  for (let seqIdx = 0; seqIdx < sequencesScheduledUntil.length; seqIdx++) {
     const sequence = sequences[seqIdx];
     if (!sequence.active) continue;
 
-    const sequenceTiming = sequenceTimings[seqIdx];
     if (
-      !sequenceTiming.scheduledUntil ||
-      sequenceTiming.scheduledUntil < forTimestamp
+      !sequencesScheduledUntil[seqIdx] ||
+      sequencesScheduledUntil[seqIdx] < forTimestamp
     ) {
-      sequenceTiming.scheduledUntil = forTimestamp;
+      sequencesScheduledUntil[seqIdx] = forTimestamp;
 
       const sequenceStep =
         sequence.steps[(stepIdx + (isInitial ? 0 : 1)) % sequence.steps.length];
 
-      console.log(
-        'calculating for',
-        isInitial ? 'initial' : '',
-        forTimestamp,
-        'step',
-        sequenceStep
-      );
       if (sequenceStep.pulse)
         notesToPlay.push(
           createPlayableNote(
             sequence.note,
             sequenceStep.velocity,
-            sequenceTiming.scheduledUntil
+            sequencesScheduledUntil[seqIdx]
           )
         );
     }
@@ -77,7 +77,7 @@ const useScheduler = sequences => {
   const schedulerRef = useRef({
     currentStepTime: null,
     sequences,
-    sequenceTimings: null, // [{ scheduledUntil }]
+    sequencesScheduledUntil: null, // [timestamp]
     stepDuration: null,
     stepIdx: null,
   });
@@ -86,10 +86,10 @@ const useScheduler = sequences => {
   useEffect(() => {
     if (sequences) {
       schedulerRef.current.sequences = sequences;
-      if (!schedulerRef.current.sequenceTimings)
-        schedulerRef.current.sequenceTimings = sequences.map(() => ({
-          scheduledUntil: null,
-        }));
+      if (!schedulerRef.current.sequencesScheduledUntil)
+        schedulerRef.current.sequencesScheduledUntil = sequences.map(
+          () => null
+        );
     }
   }, [sequences]);
 
@@ -103,11 +103,6 @@ const useScheduler = sequences => {
     if (currentTime > nextStepTime) {
       schedulerRef.current.stepIdx++;
       schedulerRef.current.currentStepTime = nextStepTime;
-      console.log(
-        'step',
-        schedulerRef.current.stepIdx,
-        schedulerRef.current.currentStepTime
-      );
     }
 
     // determine notes to play, update `scheduledUntil` timings per sequence
@@ -115,7 +110,7 @@ const useScheduler = sequences => {
       sequences,
       initialTime || nextStepTime,
       !!initialTime,
-      schedulerRef // sequenceTimings will be updated by ref
+      schedulerRef // sequencesScheduledUntil will be updated by ref
     );
 
     if (notesToPlay.length > 0) console.log('notesToPlay', notesToPlay);
