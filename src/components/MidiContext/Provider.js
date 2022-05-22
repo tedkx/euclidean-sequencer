@@ -40,7 +40,6 @@ const MidiContextProvider = ({ children }) => {
   const handleConnectionStateChanged = React.useMemo(
     () =>
       debounce(() => {
-        console.log('handling connection change');
         const outputs = Array.from(ref.current.midi.outputs.values()).filter(
           input => input.state === MidiPortState.Connected
         );
