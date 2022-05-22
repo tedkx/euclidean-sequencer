@@ -25,14 +25,14 @@ const Sequencer = () => {
   const { baseNote, scale, onBaseNoteChange, onScaleChange } =
     useGlobalControlHandlers(setSequences);
 
-  useKeyboardEvents(setSequences);
-
   const onPlayNote = React.useCallback(
     (note, sequence) => playNote(selectedOutput, note, sequence),
     [selectedOutput]
   );
 
   const { onTogglePlay, playing } = useScheduler(sequences, onPlayNote);
+
+  useKeyboardEvents(setSequences, onTogglePlay);
 
   return sequences ? (
     <div>

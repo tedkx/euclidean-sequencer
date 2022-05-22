@@ -158,17 +158,20 @@ const useGlobalControlHandlers = setSequences => {
 };
 
 // handles number presses for activating/deactivating sequences
-const useKeyboardEvents = setSequences => {
+const useKeyboardEvents = (setSequences, onTogglePlay) => {
   const keyDownHandler = useCallback(
     e => {
-      if (typeof e.key === 'string' && e.key.match(/^\d$/)) {
-        const idx = (parseInt(e.key) || 10) - 1;
-        setSequences(seqs =>
-          seqs.map((s, i) => (i === idx ? { ...s, active: !s.active } : s))
-        );
+      if (typeof e.key === 'string') {
+        if (e.key === ' ') onTogglePlay();
+        else if (e.key.match(/^\d$/)) {
+          const idx = (parseInt(e.key) || 10) - 1;
+          setSequences(seqs =>
+            seqs.map((s, i) => (i === idx ? { ...s, active: !s.active } : s))
+          );
+        }
       }
     },
-    [setSequences]
+    [setSequences, onTogglePlay]
   );
 
   useEffect(() => {
@@ -177,7 +180,7 @@ const useKeyboardEvents = setSequences => {
     return () => {
       window.removeEventListener('keydown', keyDownHandler);
     };
-  }, []); // eslint-disable-line
+  }, [keyDownHandler]); // eslint-disable-line
 };
 
 export { useGlobalControlHandlers, useKeyboardEvents, useSequences };
