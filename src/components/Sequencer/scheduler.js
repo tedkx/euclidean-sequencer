@@ -52,16 +52,15 @@ const getNotesToPlay = (sequences, forTimestamp, isInitial, schedulerRef) => {
         sequence.steps[(stepIdx + (isInitial ? 0 : 1)) % sequence.steps.length];
 
       if (sequenceStep.pulse)
-        notesToPlay.push(
+        notesToPlay.push([
           createPlayableNote(
             sequence.note,
             sequenceStep.velocity,
             sequencesScheduledUntil[seqIdx]
-          )
-        );
+          ),
+          sequence,
+        ]);
     }
-
-    break;
   }
 
   return notesToPlay;
@@ -71,11 +70,13 @@ const getNotesToPlay = (sequences, forTimestamp, isInitial, schedulerRef) => {
  * schedule notes to be played on the next sequencer step. The scheduling
  * is performed during the next `t + stepDuration` window
  * @param {Array<Sequence>} sequences
+ * @param {function} onPlayNote - Func(note, sequencer), currently only midi implementation
  */
-const useScheduler = sequences => {
+const useScheduler = (sequences, onPlayNote) => {
   const [playing, setPlaying] = useState(false);
   const schedulerRef = useRef({
     currentStepTime: null,
+    onPlayNote: null,
     sequences,
     sequencesScheduledUntil: null, // [timestamp]
     stepDuration: null,
@@ -92,6 +93,10 @@ const useScheduler = sequences => {
         );
     }
   }, [sequences]);
+
+  useEffect(() => {
+    schedulerRef.current.onPlayNote = onPlayNote;
+  }, [onPlayNote]);
 
   const schedule = useCallback(initialTime => {
     const { currentStepTime, sequences, stepDuration } = schedulerRef.current;
@@ -113,7 +118,9 @@ const useScheduler = sequences => {
       schedulerRef // sequencesScheduledUntil will be updated by ref
     );
 
-    if (notesToPlay.length > 0) console.log('notesToPlay', notesToPlay);
+    notesToPlay.forEach(([note, sequence]) =>
+      schedulerRef.current.onPlayNote(note, sequence)
+    );
   }, []);
 
   useEffect(() => {

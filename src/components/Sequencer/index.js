@@ -7,8 +7,12 @@ import {
   useSequences,
 } from './handlers';
 import { useScheduler } from './scheduler';
+import MidiContext from '../MidiContext';
+import { playNote } from 'lib/midi';
 
 const Sequencer = () => {
+  const { selectedOutput } = React.useContext(MidiContext);
+
   const {
     onNoteChange,
     onOffsetChange,
@@ -23,7 +27,12 @@ const Sequencer = () => {
 
   useKeyboardEvents(setSequences);
 
-  const { onTogglePlay, playing } = useScheduler(sequences);
+  const onPlayNote = React.useCallback(
+    (note, sequence) => playNote(selectedOutput, note, sequence),
+    [selectedOutput]
+  );
+
+  const { onTogglePlay, playing } = useScheduler(sequences, onPlayNote);
 
   return sequences ? (
     <div>
