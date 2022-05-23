@@ -4,20 +4,20 @@ const defaultSequences = [
   {
     active: true,
     offset: 0,
+    steps: generateEuclideanRhythm(16, 4),
+  },
+  {
+    active: false,
+    offset: 0,
     steps: generateEuclideanRhythm(16, 8),
   },
   {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 12),
   },
   {
-    active: true,
-    offset: 0,
-    steps: generateEuclideanRhythm(16, 12),
-  },
-  {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 5),
   },
@@ -27,17 +27,17 @@ const defaultSequences = [
     steps: generateEuclideanRhythm(16, 3),
   },
   {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 8),
   },
   {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 12),
   },
   {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 12),
   },
@@ -47,7 +47,7 @@ const defaultSequences = [
     steps: generateEuclideanRhythm(16, 5),
   },
   {
-    active: true,
+    active: false,
     offset: 0,
     steps: generateEuclideanRhythm(16, 3),
   },
