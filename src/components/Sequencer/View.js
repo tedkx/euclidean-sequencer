@@ -14,6 +14,7 @@ const SequencerView = ({
   playing,
   scale,
   sequences,
+  stepIdx,
   ...props
 }) => {
   return (
@@ -39,7 +40,11 @@ const SequencerView = ({
         />
       </div>
       <div>
-        <SequenceDisplay colorPalette={colorPalette} sequences={sequences} />
+        <SequenceDisplay
+          colorPalette={colorPalette}
+          sequences={sequences}
+          stepIdx={stepIdx}
+        />
       </div>
     </Card>
   );
@@ -58,6 +63,7 @@ SequencerView.propTypes = {
   playing: bool,
   scale: string,
   sequences: array,
+  stepIdx: number,
 };
 
 export default SequencerView;

@@ -8,6 +8,8 @@ const canvasWidth = 400;
 const canvasHeight = 500;
 const canvasCenter = { x: canvasWidth / 2, y: canvasHeight / 2 };
 const inactiveColor = '#383838';
+const playingColor = '#EEE';
+const inactivePlayingColor = '#777';
 const lineWidth = 1;
 const stepSize = 4;
 
@@ -20,25 +22,46 @@ const drawCircle = (ctx, radius, strokeColor) => {
   ctx.stroke();
 };
 
-const drawSequenceStep = (ctx, radius, angle, color, { pulse }) => {
-  var x = canvasCenter.x + radius * Math.cos((-angle * Math.PI) / 180);
-  var y = canvasCenter.y + radius * Math.sin((-angle * Math.PI) / 180);
+const drawSequenceStep = (
+  ctx,
+  radius,
+  angle,
+  color,
+  { pulse },
+  sequencerActive,
+  playing
+) => {
+  var x = canvasCenter.x + radius * Math.cos((angle * Math.PI) / 180);
+  var y = canvasCenter.y + radius * Math.sin((angle * Math.PI) / 180);
+
+  const bgColor =
+    playing && pulse && sequencerActive
+      ? playingColor
+      : playing && pulse && !sequencerActive
+      ? inactivePlayingColor
+      : pulse && sequencerActive
+      ? color
+      : pulse
+      ? inactiveColor
+      : cardBackground;
+  const strokeColor =
+    playing && !pulse
+      ? inactivePlayingColor
+      : sequencerActive
+      ? color
+      : inactiveColor;
 
   ctx.moveTo(x, y);
   ctx.beginPath();
   ctx.arc(x, y, stepSize, 0, 2 * Math.PI);
   ctx.lineWidth = lineWidth;
-  if (pulse) {
-    ctx.fillStyle = color;
-  } else {
-    ctx.fillStyle = cardBackground;
-    ctx.strokeStyle = color;
-  }
+  ctx.fillStyle = bgColor;
+  ctx.strokeStyle = strokeColor;
   ctx.stroke();
   ctx.fill();
 };
 
-const SequenceDisplay = ({ colorPalette, sequences }) => {
+const SequenceDisplay = ({ colorPalette, sequences, stepIdx }) => {
   const canvasRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -55,12 +78,22 @@ const SequenceDisplay = ({ colorPalette, sequences }) => {
           drawCircle(ctx, radius, active ? colorPalette[i] : color);
 
           const angleStep = 360 / steps.length;
+          const playingStepIdx =
+            stepIdx === null ? null : stepIdx % steps.length;
           for (let si = 0; si < steps.length; si++)
-            drawSequenceStep(ctx, radius, si * angleStep, color, steps[si]);
+            drawSequenceStep(
+              ctx,
+              radius,
+              si * angleStep,
+              colorPalette[i],
+              steps[si],
+              active,
+              playingStepIdx === si
+            );
         }
       }
     }
-  }, [colorPalette, sequences]);
+  }, [colorPalette, sequences, stepIdx]);
 
   return (
     <canvas

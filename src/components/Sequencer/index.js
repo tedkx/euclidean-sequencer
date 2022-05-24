@@ -12,6 +12,7 @@ import { playNote } from 'lib/midi';
 
 const Sequencer = () => {
   const { selectedOutput } = React.useContext(MidiContext);
+  const [stepIdx, setStepIdx] = React.useState(null);
 
   const {
     onNoteChange,
@@ -30,7 +31,11 @@ const Sequencer = () => {
     [selectedOutput]
   );
 
-  const { onTogglePlay, playing } = useScheduler(sequences, onPlayNote);
+  const { onTogglePlay, playing } = useScheduler(
+    sequences,
+    onPlayNote,
+    setStepIdx
+  );
 
   useKeyboardEvents(setSequences, onTogglePlay);
 
@@ -49,6 +54,7 @@ const Sequencer = () => {
         playing={playing}
         scale={scale}
         sequences={sequences}
+        stepIdx={stepIdx}
       />
     </div>
   ) : null;
